@@ -8,6 +8,7 @@
     <string name="undo">Undo</string>
     <string name="discard">Discard</string>
     <string name="save">Save</string>
+    <string name="ok">OK</string>
 
     <string name="title_of_event">Title of Event</string>
     <string name="date_of_event">Date of Event</string>
@@ -15,5 +16,6 @@
     <string name="edit_event">Edit Event</string>
     <string name="add_event">Add Event</string>
 
-    <string name="information_dialog"><a href="https://github.com/GavinThePacMan/daysuntil">View on GitHub</a><br/><br/>Copyright 2015 Gavin Pacini</string>
+    <string name="information_heading">Information</string>
+    <string name="information_dialog"><a href="https://github.com/GavinThePacMan/daysuntil">View on GitHub</a>\n\nCopyright 2015 Gavin Pacini</string>
 </resources>

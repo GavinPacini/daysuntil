@@ -80,7 +80,6 @@ class MainActivity : AppCompatActivity() {
             showInfoDialog()
             return true
         }
-
         return super.onOptionsItemSelected(item)
     }
 
@@ -137,11 +136,7 @@ class MainActivity : AppCompatActivity() {
 
                     override fun onNext(events: List<Event>) {
                         mProgressBar.visibility = View.GONE
-                        if (events.size() > 0) {
-                            mTextAddEvent.visibility = View.GONE
-                        } else {
-                            mTextAddEvent.visibility = View.VISIBLE
-                        }
+                        mTextAddEvent.visibility =  if(events.size() > 0) View.GONE else View.VISIBLE
                         mSwipeRefresh.isRefreshing = false
                         mEasyRecycleAdapter?.addItems(events)
                         mEasyRecycleAdapter?.notifyDataSetChanged()
@@ -198,9 +193,9 @@ class MainActivity : AppCompatActivity() {
     private fun showInfoDialog() {
 
         val dialog = AlertDialog.Builder(this)
-                .setTitle("Information")
+                .setTitle(R.string.information_heading)
                 .setMessage(R.string.information_dialog)
-                .setPositiveButton("OK", { dialog, num -> dialog.dismiss() })
+                .setPositiveButton(R.string.ok, { dialog, num -> dialog.dismiss() })
                 .show()
 
         //Make text in alert clickable for links

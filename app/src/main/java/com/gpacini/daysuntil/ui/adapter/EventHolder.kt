@@ -53,7 +53,7 @@ class EventHolder(view: View) : ItemViewHolder<Event>(view) {
         if(days < 0) days *= -1
         val dayOrDays = if(days.toInt() == 1) "day" else "days"
 
-        mTextTime?.text = "$days $dayOrDays $sinceOrUntil..."
+        mTextTime?.text = "${days} ${dayOrDays} ${sinceOrUntil}..."
     }
 
     override fun onSetListeners() {

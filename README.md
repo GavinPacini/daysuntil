@@ -49,7 +49,7 @@ Possible Upcoming Features
 
 Minor Bugs
 --------
- - Landscape support
+ - No support for state change in landscape
  - Handle refresh better after undoing
  
 Notes
