@@ -14,6 +14,8 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.support.v7.widget.helper.ItemTouchHelper
+import android.text.Html
+import android.text.method.LinkMovementMethod
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -109,7 +111,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleSwipe(event: Event){
-        RealmManager.removeEvent(this, event.uuid)
+        mSubscriptions?.add(RealmManager.removeEvent(this, event.uuid)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(object : RealmSubscriber<Event>() {
@@ -119,6 +121,7 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 })
+        )
     }
 
     private fun loadEvents() {
@@ -165,14 +168,12 @@ class MainActivity : AppCompatActivity() {
         val snackBar = Snackbar
                 .make(mContainer, R.string.event_successfully_removed, Snackbar.LENGTH_LONG)
                 .setAction(R.string.undo, {
-                    mSubscriptions?.add(RealmManager
-                            .newEvent(this, event.title, event.uuid, event.timestamp)
+                    mSubscriptions?.add(RealmManager.newEvent(this, event.title, event.uuid, event.timestamp)
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribeOn(Schedulers.newThread())
                             .subscribe(object : RealmSubscriber<RealmEvent>() {
-                                override fun onCompleted() {
-                                    reloadEvents()
-                                }
+                                //TODO: Handle this better
+                                override fun onCompleted() = reloadEvents()
                             })
                     )
                 })
@@ -195,10 +196,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showInfoDialog() {
-        AlertDialog.Builder(this)
+
+        val dialog = AlertDialog.Builder(this)
                 .setTitle("Information")
-                .setMessage("Licenses etc.\n\nCopyright \u00a9 2015 Gavin Pacini")
+                .setMessage(R.string.information_dialog)
                 .setPositiveButton("OK", { dialog, num -> dialog.dismiss() })
                 .show()
+
+        //Make text in alert clickable for links
+        val messageTextView = dialog.findViewById(android.R.id.message) as? TextView
+        messageTextView?.movementMethod = LinkMovementMethod.getInstance()
     }
 }

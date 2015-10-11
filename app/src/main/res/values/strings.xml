@@ -14,4 +14,6 @@
 
     <string name="edit_event">Edit Event</string>
     <string name="add_event">Add Event</string>
+
+    <string name="information_dialog"><a href="https://github.com/GavinThePacMan/daysuntil">View on GitHub</a><br/><br/>Copyright 2015 Gavin Pacini</string>
 </resources>
