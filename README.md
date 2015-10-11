@@ -40,6 +40,7 @@ However, if you don't want to import it, you can run this from the root of the p
 
     ./gradlew installRunDebug
    
+**Note:** If you get a `couldn't find "librealm-jni.so"` error, you must build with build tools 1.3.1. You can make this change in the project `build.gradle` file. See this for more information: https://github.com/realm/realm-java/issues/1421
 
 Possible Upcoming Features
 --------

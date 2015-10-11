@@ -5,12 +5,12 @@ buildscript {
         jcenter()
     }
     dependencies {
-        //Need to build with 1.4.0 first to create drawables
-        //Then use 1.3.1 as Realm is having problems with 1.4.0
-        //See this for more information: https://github.com/realm/realm-java/issues/1421
 
-        //classpath 'com.android.tools.build:gradle:1.4.0-beta6'
-        classpath 'com.android.tools.build:gradle:1.3.1'
+        classpath 'com.android.tools.build:gradle:1.4.0-beta6'
+
+        //If you get a 'couldn't find "librealm-jni.so"'error, build with build tools 1.3.1 as below
+        //See this for more information: https://github.com/realm/realm-java/issues/1421
+        //classpath 'com.android.tools.build:gradle:1.3.1'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
