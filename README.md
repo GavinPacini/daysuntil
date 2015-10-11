@@ -26,11 +26,9 @@ I used this great project, [Android Boilerplate](https://github.com/hitherejoe/A
 Requirements
 ------------
  - [Android SDK](http://developer.android.com/sdk/index.html)
- - Android [6.0 (API 23) ](http://developer.android.com/tools/revisions/platforms.html#6.0)
- - Android SDK Tools
  - Android SDK Build tools 23.0.1
- - Android Support Repository
- - Android Support Library
+ - Android Support Repository and Library
+ - Gradle Plugin 1.4.0-beta6 (For VectorDrawable support)
  
 Building
 --------
@@ -40,7 +38,7 @@ However, if you don't want to import it, you can run this from the root of the p
 
     ./gradlew installRunDebug
    
-**Note:** If you get a `couldn't find "librealm-jni.so"` error, you must build with build tools 1.3.1. You can make this change in the project `build.gradle` file. [See this issue for more information.](https://github.com/realm/realm-java/issues/1421)
+**Note:** If you get a `couldn't find "librealm-jni.so"` error, you must build the project with gradle plugin 1.3.1. You can make this change in the project `build.gradle` file. [See this issue for more information.](https://github.com/realm/realm-java/issues/1421)
 
 Possible Upcoming Features
 --------
