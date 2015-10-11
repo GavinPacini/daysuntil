@@ -54,14 +54,8 @@ dependencies {
 
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.3'
     compile 'com.soundcloud.android:android-crop:1.0.1@aar'
-
-    testCompile 'junit:junit:4.12'
-    testCompile('org.robolectric:robolectric:3.0') {
-        exclude group: 'commons-logging', module: 'commons-logging'
-        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
-    }
-
 }
+
 buildscript {
     ext.kotlin_version = '0.14.449'
     repositories {
@@ -71,6 +65,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
+
 repositories {
     mavenCentral()
 }
