@@ -106,7 +106,7 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
             loadImage(imageHelper.with(mEvent?.uuid))
             uuid = mEvent?.uuid
         } else {
-            supportActionBar.title = "Add New Event"
+            supportActionBar.title = resources.getString(R.string.add_event)
             uuid = UUID.randomUUID().toString()
         }
     }
