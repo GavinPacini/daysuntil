@@ -45,7 +45,8 @@ Possible Upcoming Features
 --------
  - Unit Tests
  - Automated Tests
- - Searching for Images
+ - Searching for Images in Event Activity
+ - Re-crop image without reselecting one in Event Activity
 
 Minor Bugs
 --------

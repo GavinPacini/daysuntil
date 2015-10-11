@@ -6,7 +6,6 @@
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
         <item name="alertDialogTheme">@style/AlertDialogStyle</item>
-        <item name="android:itemTextAppearance">@style/OptionsMenuTextColor</item>
         <item name="android:textColorPrimary">@color/black_87pc</item>
         <item name="android:textColor">@color/white</item>
         <item name="colorControlNormal">@color/primary</item>
@@ -21,11 +20,13 @@
         <item name="android:textColorPrimary">@color/white</item>
         <item name="drawerArrowStyle">@style/HamburgerIconStyle</item>
         <item name="android:itemTextAppearance">@style/OptionsMenuTextColor</item>
+        <item name="colorControlNormal">@color/white</item>
     </style>
 
     <style name="AlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:windowTitleStyle">@style/DialogTitleText</item>
         <item name="colorAccent">@color/primary</item>
+        <item name="android:textColorLink">@color/primary</item>
     </style>
 
     <style name="DialogTitleText">

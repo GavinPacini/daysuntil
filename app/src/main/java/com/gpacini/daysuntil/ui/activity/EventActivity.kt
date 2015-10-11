@@ -92,6 +92,7 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
 
     fun setupScreen() {
         setSupportActionBar(mToolbar)
+        supportActionBar.setDisplayHomeAsUpEnabled(true)
 
         if (mEvent != null) {
             supportActionBar.title = resources.getString(R.string.edit_event)
