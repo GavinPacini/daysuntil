@@ -1,6 +1,10 @@
 Days Until
 ===================
-Android app demonstrating the use of Kotlin, RxJava, Realm and more...
+A simple Android app demonstrating the use of Kotlin, RxJava, Realm and more...
+
+<p align="center">
+    <img src="images/device.png" alt="Web Launcher"/>
+</p>
 
 What do I mean by "more"? Here's exactly what I've made extensive use of:
 
@@ -8,20 +12,16 @@ What do I mean by "more"? Here's exactly what I've made extensive use of:
  - [RxJava](https://github.com/ReactiveX/RxJava) and [RxAndroid](https://github.com/ReactiveX/RxAndroid)
  - [Realm](https://realm.io/) with help from [Realm with RxJava](https://github.com/kboyarshinov/realm-rxjava-example)
  - [EasyAdapter](https://github.com/ribot/easy-adapter)
- - [Kotterknife](https://github.com/JakeWharton/kotterknife)
- - [MaterialDateTimePicker](https://github.com/wdullaer/MaterialDateTimePicker)
- - [Android-Universal-Image-Loader](https://github.com/nostra13/Android-Universal-Image-Loader)
+ - [Kotter Knife](https://github.com/JakeWharton/kotterknife)
+ - [Material DateTime Picker](https://github.com/wdullaer/MaterialDateTimePicker)
+ - [Universal Image Loader](https://github.com/nostra13/Android-Universal-Image-Loader)
  - [Android-Crop](https://github.com/jdamcd/android-crop)
- - [Android-Boilerplate](https://github.com/hitherejoe/Android-Boilerplate)
  
 P.S: They are all amazing.
 
-And I hope to someday also use:
+I used this great project, [Android Boilerplate](https://github.com/hitherejoe/Android-Boilerplate), as a reference.
 
-- [Espresso](https://code.google.com/p/android-test-kit/wiki/Espresso)
-- [Robolectric](http://robolectric.org/) 
 
-*I need to write some tests*
 
 Requirements
 ------------
@@ -40,7 +40,7 @@ However, if you don't want to import it, you can run this from the root of the p
 
     ./gradlew installRunDebug
    
-**Note:** If you get a `couldn't find "librealm-jni.so"` error, you must build with build tools 1.3.1. You can make this change in the project `build.gradle` file. See this for more information: https://github.com/realm/realm-java/issues/1421
+**Note:** If you get a `couldn't find "librealm-jni.so"` error, you must build with build tools 1.3.1. You can make this change in the project `build.gradle` file. [See this issue for more information.](https://github.com/realm/realm-java/issues/1421)
 
 Possible Upcoming Features
 --------
@@ -48,6 +48,8 @@ Possible Upcoming Features
  - Automated Tests
  - Searching for Images in Event Activity
  - Re-crop image without reselecting one in Event Activity
+
+*I need to write some tests*
 
 Minor Bugs
 --------
