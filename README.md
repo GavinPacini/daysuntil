@@ -21,7 +21,7 @@ P.S: They are all amazing.
 
 I used this great project, [Android Boilerplate](https://github.com/hitherejoe/Android-Boilerplate), as a reference.
 
-
+I had been looking for something like this myself and couldn't find one. So, if you were like me, I hope you learn something from this!
 
 Requirements
 ------------
