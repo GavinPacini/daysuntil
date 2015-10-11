@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="2dp"
+    android:layout_marginBottom="2dp"
+    android:background="@color/accent"
+    card_view:cardCornerRadius="2dp"
+    card_view:cardUseCompatPadding="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <RelativeLayout
+            android:id="@+id/container_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/touchable_background_white">
+
+            <ImageView
+                android:id="@+id/image_event"
+                android:layout_width="fill_parent"
+                android:layout_height="168dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:scaleType="centerCrop"
+                android:background="@color/primary_light"/>
+
+            <TextView
+                android:id="@+id/text_time"
+                style="@style/CardButtonOverImageStyle"
+                android:textSize="@dimen/text_large_body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/image_event"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:text="TIME UNTIL"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/container_event"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/container_image"
+            android:background="@drawable/touchable_background_white">
+
+            <TextView
+                android:id="@+id/text_title"
+                style="@style/CardButtonHeadingStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black_87pc"
+                android:textStyle="bold"
+                android:text="EVENT TITLE GOES HERE"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

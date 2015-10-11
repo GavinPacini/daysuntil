@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Days Until</string>
+    <string name="event_activity">Event Activity</string>
+
+    <string name="event_successfully_added">Event added</string>
+    <string name="event_successfully_removed">Event removed</string>
+
+    <string name="undo">Undo</string>
+    <string name="discard">Discard</string>
+    <string name="save">Save</string>
+
+    <string name="title_of_event">Title of Event</string>
+    <string name="date_of_event">Date of Event</string>
+
+    <string name="edit_event">Edit Event</string>
+    <string name="add_event">Add Event</string>
+</resources>
