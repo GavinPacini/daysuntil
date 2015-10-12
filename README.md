@@ -58,7 +58,7 @@ Notes
 --------
 Due to the way Realm works, it's impossible to iterate over each individual result **as they are returned.** Realm returns a `RealmResult` object which contains the results of your query. Therefore, when using RxJava, it is not possible to call `onNext` for each result, you must call it only at the end after you have your `RealmResult` object.
 
-I wrote my `RealmObject` class `RealmEvent` in Java because I was having problems with the annotation processor not adding them to the Realm schema if I wrote it in Kotlin. Pity.
+~~I wrote my `RealmObject` class `RealmEvent` in Java because I was having problems with the annotation processor not adding them to the Realm schema if I wrote it in Kotlin.~~ I have since fixed this by using the `kapt` method in my build.gradle file.
 
 Pull Requests
 --------
