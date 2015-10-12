@@ -4,10 +4,7 @@ import android.content.Context
 import com.gpacini.daysuntil.data.model.Event
 import com.gpacini.daysuntil.data.model.RealmEvent
 import com.kboyarshinov.realmrxjava.rx.RealmObservable
-import io.realm.Realm
-import io.realm.RealmResults
 import rx.Observable
-import rx.functions.Func1
 import java.util.*
 
 /**
@@ -16,16 +13,16 @@ import java.util.*
 object RealmManager {
 
     public fun loadEvents(context: Context): Observable<List<Event>> {
-        return RealmObservable.results(context,{ realm ->
+        return RealmObservable.results(context, { realm ->
             realm.where(RealmEvent::class.java).findAllSorted("timestamp", false)
         })
-        .map{ realmEvents ->
-            val events = ArrayList<Event>(realmEvents.size())
-            for (realmEvent in realmEvents) {
-                events.add(Event(realmEvent))
-            }
-            events
-        }
+                .map { realmEvents ->
+                    val events = ArrayList<Event>(realmEvents.size())
+                    for (realmEvent in realmEvents) {
+                        events.add(Event(realmEvent))
+                    }
+                    events
+                }
     }
 
     public fun newEvent(context: Context, title: String?, uuid: String?, timestamp: Long): Observable<RealmEvent> {

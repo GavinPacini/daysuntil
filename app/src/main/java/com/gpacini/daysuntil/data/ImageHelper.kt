@@ -1,7 +1,6 @@
 package com.gpacini.daysuntil.data
 
 import android.graphics.Bitmap
-import android.net.Uri
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException

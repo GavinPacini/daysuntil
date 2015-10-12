@@ -39,7 +39,7 @@ class EventHolder(view: View) : ItemViewHolder<Event>(view) {
         setDays(event)
     }
 
-    private fun setDays(event: Event){
+    private fun setDays(event: Event) {
         val then = Calendar.getInstance()
         then.timeInMillis = event.timestamp
 
@@ -49,9 +49,9 @@ class EventHolder(view: View) : ItemViewHolder<Event>(view) {
 
         var days: Long = difference / MILLIS_IN_DAY
 
-        val sinceOrUntil = if(days < 0) "since" else "until"
-        if(days < 0) days *= -1
-        val dayOrDays = if(days.toInt() == 1) "day" else "days"
+        val sinceOrUntil = if (days < 0) "since" else "until"
+        if (days < 0) days *= -1
+        val dayOrDays = if (days.toInt() == 1) "day" else "days"
 
         mTextTime?.text = "${days} ${dayOrDays} ${sinceOrUntil}..."
     }

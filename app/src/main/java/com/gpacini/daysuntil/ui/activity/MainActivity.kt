@@ -14,7 +14,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.text.Html
 import android.text.method.LinkMovementMethod
 import android.view.Menu
 import android.view.MenuItem
@@ -109,7 +108,7 @@ class MainActivity : AppCompatActivity() {
         mAddEventFAB.setOnClickListener { startActivityForResult(EventActivity.getNewIntent(this), REQUEST_FROM_EVENT) }
     }
 
-    private fun handleSwipe(event: Event){
+    private fun handleSwipe(event: Event) {
         mSubscriptions?.add(RealmManager.removeEvent(this, event.uuid)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
@@ -136,7 +135,7 @@ class MainActivity : AppCompatActivity() {
 
                     override fun onNext(events: List<Event>) {
                         mProgressBar.visibility = View.GONE
-                        mTextAddEvent.visibility =  if(events.size() > 0) View.GONE else View.VISIBLE
+                        mTextAddEvent.visibility = if (events.size() > 0) View.GONE else View.VISIBLE
                         mSwipeRefresh.isRefreshing = false
                         mEasyRecycleAdapter?.addItems(events)
                         mEasyRecycleAdapter?.notifyDataSetChanged()

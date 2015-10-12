@@ -175,7 +175,7 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
         setDate(year, monthOfYear, dayOfMonth)
     }
 
-    private fun setDate(year: Int, monthOfYear: Int, dayOfMonth: Int){
+    private fun setDate(year: Int, monthOfYear: Int, dayOfMonth: Int) {
         mCalendar?.set(year, monthOfYear, dayOfMonth)
 
         val dateFormat = DateFormat.getDateInstance()

@@ -1,11 +1,7 @@
 package com.gpacini.daysuntil
 
 import android.app.Application
-import android.content.Context
-import android.content.Intent
 import com.gpacini.daysuntil.data.ImageHelper
-import com.gpacini.daysuntil.data.model.Event
-import com.gpacini.daysuntil.ui.activity.EventActivity
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
 
