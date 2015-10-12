@@ -36,7 +36,7 @@
             android:layout_centerInParent="true"
             android:textColor="@color/black_87pc"
             android:visibility="gone"
-            android:text="No events added. Please add one."/>
+            android:text="@string/no_events_added"/>
 
         <ProgressBar
             style="?android:attr/progressBarStyleLarge"

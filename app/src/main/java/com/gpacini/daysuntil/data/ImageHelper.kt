@@ -11,7 +11,9 @@ import java.io.IOException
 class ImageHelper {
 
     companion object Factory {
-        private val instanceImageHelper = ImageHelper()
+        private val instanceImageHelper: ImageHelper by lazy {
+            ImageHelper()
+        }
 
         public fun getInstance(): ImageHelper {
             return instanceImageHelper

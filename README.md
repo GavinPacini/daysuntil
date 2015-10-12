@@ -60,6 +60,10 @@ Due to the way Realm works, it's impossible to iterate over each individual resu
 
 I wrote my `RealmObject` class `RealmEvent` in Java because I was having problems with the annotation processor not adding them to the Realm schema if I wrote it in Kotlin. Pity.
 
+Pull Requests
+--------
+If you see something you think could be better, please don't hesitate to submit a pull request! 
+
 License
 --------------
 
