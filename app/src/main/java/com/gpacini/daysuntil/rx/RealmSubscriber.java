@@ -1,4 +1,4 @@
-package com.kboyarshinov.realmrxjava.rx;
+package com.gpacini.daysuntil.rx;
 
 import rx.Subscriber;
 

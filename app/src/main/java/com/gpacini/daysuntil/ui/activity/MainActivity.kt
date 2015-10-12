@@ -25,10 +25,8 @@ import com.gpacini.daysuntil.data.ImageHelper
 import com.gpacini.daysuntil.data.RealmManager
 import com.gpacini.daysuntil.data.model.Event
 import com.gpacini.daysuntil.data.model.RealmEvent
+import com.gpacini.daysuntil.rx.RealmSubscriber
 import com.gpacini.daysuntil.ui.adapter.EventHolder
-import com.kboyarshinov.realmrxjava.rx.RealmSubscriber
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
 import uk.co.ribot.easyadapter.EasyRecyclerAdapter
 import java.util.*
@@ -110,8 +108,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun handleSwipe(event: Event) {
         mSubscriptions?.add(RealmManager.removeEvent(this, event.uuid)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.newThread())
                 .subscribe(object : RealmSubscriber<Event>() {
                     override fun onNext(event: Event) {
                         if (mEasyRecycleAdapter?.removeItem(event) ?: false) {
@@ -124,8 +120,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadEvents() {
         mSubscriptions?.add(RealmManager.loadEvents(this)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.newThread())
                 .subscribe(object : RealmSubscriber<List<Event>>() {
 
                     override fun onError(error: Throwable) {
@@ -163,8 +157,6 @@ class MainActivity : AppCompatActivity() {
                 .make(mContainer, R.string.event_successfully_removed, Snackbar.LENGTH_LONG)
                 .setAction(R.string.undo, {
                     mSubscriptions?.add(RealmManager.newEvent(this, event.title, event.uuid, event.timestamp)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribeOn(Schedulers.newThread())
                             .subscribe(object : RealmSubscriber<RealmEvent>() {
                                 //TODO: Handle this better
                                 override fun onCompleted() = reloadEvents()

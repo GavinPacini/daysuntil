@@ -22,13 +22,11 @@ import com.gpacini.daysuntil.data.ImageHelper
 import com.gpacini.daysuntil.data.RealmManager
 import com.gpacini.daysuntil.data.model.Event
 import com.gpacini.daysuntil.data.model.RealmEvent
-import com.kboyarshinov.realmrxjava.rx.RealmSubscriber
+import com.gpacini.daysuntil.rx.RealmSubscriber
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener
 import com.soundcloud.android.crop.Crop
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
 import java.io.File
 import java.text.DateFormat
@@ -155,8 +153,6 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
                 imageHelper.saveImage(imageBitmap, uuid)
 
                 mSubscriptions?.add(RealmManager.newEvent(this, mInputTitle.text.toString().trim(), uuid!!, mCalendar!!.timeInMillis)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeOn(Schedulers.newThread())
                         .subscribe(object : RealmSubscriber<RealmEvent>() {
                             override fun onCompleted() {
                                 Toast.makeText(this@EventActivity, R.string.event_successfully_added, Toast.LENGTH_LONG).show()
