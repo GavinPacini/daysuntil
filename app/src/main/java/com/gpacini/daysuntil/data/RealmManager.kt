@@ -15,7 +15,7 @@ import java.util.*
 object RealmManager {
 
     public fun loadEvents(context: Context): Observable<ArrayList<Event>> {
-        return androidThreading(RealmObservable.results(context, { realm ->
+        return RealmObservable.results(context, { realm ->
             realm.where(RealmEvent::class.java).findAllSorted("timestamp", false)
         })
         .map { realmEvents ->
@@ -24,29 +24,30 @@ object RealmManager {
                 events.add(Event(realmEvent))
             }
             events
-        })
+        }.androidThreads()
     }
 
     public fun newEvent(context: Context, title: String?, uuid: String?, timestamp: Long): Observable<RealmEvent> {
-        return androidThreading(RealmObservable.obj(context, { realm ->
+        return RealmObservable.obj(context, { realm ->
             val event = RealmEvent()
             event.title = title
             event.uuid = uuid
             event.timestamp = timestamp
             realm.copyToRealmOrUpdate(event)
-        }))
+        }).androidThreads()
     }
 
     public fun removeEvent(context: Context, uuid: String?): Observable<Event> {
-        return androidThreading(RealmObservable.remove(context, { realm ->
+        return RealmObservable.remove(context, { realm ->
             val realmEvent = realm.where(RealmEvent::class.java).equalTo("uuid", uuid).findFirst()
             val event = Event(realmEvent)
             realmEvent.removeFromRealm()
             event
-        }))
+        }).androidThreads()
     }
 
-    private fun <T> androidThreading(observable: Observable<T>): Observable<T> {
-        return observable.observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.newThread())
+    fun <T> Observable<T>.androidThreads(): Observable<T> {
+        return this.observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.newThread())
     }
 }
