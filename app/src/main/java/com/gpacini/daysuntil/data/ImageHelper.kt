@@ -33,7 +33,7 @@ class ImageHelper {
 
     public fun saveImage(bmp: Bitmap?, uuid: String?) {
 
-        val folder = File(filePath);
+        val folder = File(filePath)
         val imageFile = File(filePath + "/${uuid}.jpg")
 
         if (!folder.exists()) {
@@ -44,20 +44,8 @@ class ImageHelper {
             imageFile.createNewFile();
         }
 
-        var out: FileOutputStream? = null
-        try {
-            out = FileOutputStream(imageFile);
-            bmp?.compress(Bitmap.CompressFormat.JPEG, 85, out);
-        } catch (e: Exception) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-            } catch (e: IOException) {
-                e.printStackTrace();
-            }
+        FileOutputStream(imageFile).use {
+            bmp?.compress(Bitmap.CompressFormat.JPEG, 85, it)
         }
     }
 
