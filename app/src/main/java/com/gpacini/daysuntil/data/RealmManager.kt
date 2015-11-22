@@ -19,7 +19,7 @@ object RealmManager {
             realm.where(RealmEvent::class.java).findAllSorted("timestamp", false)
         })
         .map { realmEvents ->
-            val events = ArrayList<Event>(realmEvents.size())
+            val events = ArrayList<Event>(realmEvents.size)
             for (realmEvent in realmEvents) {
                 events.add(Event(realmEvent))
             }

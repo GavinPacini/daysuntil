@@ -192,8 +192,10 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
     private fun checkAllFields() {
         if (mInputTitle.text.toString().isNotBlank() && mInputDate.text.toString().isNotBlank() && mCalendar != null && imageBitmap != null) {
             mButtonSave.isEnabled = true;
+            mButtonSave.setTextColor(R.color.primary)
         } else {
             mButtonSave.isEnabled = false;
+            mButtonSave.setTextColor(R.color.light_grey)
         }
     }
 

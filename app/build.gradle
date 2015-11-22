@@ -3,12 +3,12 @@ apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    buildToolsVersion "23.0.2"
 
     defaultConfig {
         applicationId "com.gpacini.daysuntil"
         minSdkVersion 15
-        targetSdkVersion 22
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
     }
@@ -25,13 +25,17 @@ android {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE'
     }
+    // Incremental builds currently doesn't work with Kotlin
+    dexOptions {
+        incremental false
+    }
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
 }
 
 dependencies {
-    final SUPPORT_LIBRARY_VERSION = '23.0.1'
+    final SUPPORT_LIBRARY_VERSION = '23.1.1'
 
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -46,7 +50,7 @@ dependencies {
     compile 'io.reactivex:rxandroid:1.0.1'
     compile 'io.reactivex:rxjava:1.0.14'
 
-    compile 'io.realm:realm-android:0.83.0'
+    compile 'io.realm:realm-android:0.85.0'
 
     compile 'uk.co.ribot:easyadapter:1.5.0@aar'
 
@@ -55,14 +59,13 @@ dependencies {
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.3'
     compile 'com.soundcloud.android:android-crop:1.0.1@aar'
 
-    //for annotation processing to work with kotlin
-    kapt 'io.realm:realm-android:0.83.0'
+    kapt 'io.realm:realm-android:0.85.0'
 }
 
 buildscript {
-    ext.kotlin_version = '0.14.449'
+    ext.kotlin_version = '1.0.0-beta-2423'
     repositories {
-        mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -70,5 +73,5 @@ buildscript {
 }
 
 repositories {
-    mavenCentral()
+    jcenter()
 }

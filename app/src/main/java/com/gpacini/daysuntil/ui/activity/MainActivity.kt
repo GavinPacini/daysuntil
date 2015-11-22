@@ -15,6 +15,7 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.text.method.LinkMovementMethod
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -92,7 +93,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val event = mEasyRecycleAdapter?.getItem(viewHolder.position) ?: return
+                val event = mEasyRecycleAdapter?.getItem(viewHolder.layoutPosition) ?: return
                 handleSwipe(event)
             }
         }
@@ -129,7 +130,7 @@ class MainActivity : AppCompatActivity() {
 
                     override fun onNext(events: List<Event>) {
                         mProgressBar.visibility = View.GONE
-                        mTextAddEvent.visibility = if (events.size() > 0) View.GONE else View.VISIBLE
+                        mTextAddEvent.visibility = if (events.size > 0) View.GONE else View.VISIBLE
                         mSwipeRefresh.isRefreshing = false
                         mEasyRecycleAdapter?.addItems(events)
                         mEasyRecycleAdapter?.notifyDataSetChanged()
