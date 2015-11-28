@@ -155,7 +155,7 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
                             override fun onCompleted() {
 
                                 val toastMessageResource =
-                                        if(isEditingEvent) R.string.event_successfully_edited
+                                        if (isEditingEvent) R.string.event_successfully_edited
                                         else R.string.event_successfully_added
 
                                 Toast.makeText(this@EventActivity, toastMessageResource, Toast.LENGTH_LONG).show()

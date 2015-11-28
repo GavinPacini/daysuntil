@@ -15,7 +15,6 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.text.method.LinkMovementMethod
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -190,7 +189,10 @@ class MainActivity : AppCompatActivity() {
                 .setPositiveButton(R.string.ok, { dialog, num -> dialog.dismiss() })
                 .show()
 
-        //Make text in alert clickable for links
+        makeLinkClickable(dialog)
+    }
+
+    private fun makeLinkClickable(dialog: AlertDialog){
         val messageTextView = dialog.findViewById(android.R.id.message) as? TextView
         messageTextView?.movementMethod = LinkMovementMethod.getInstance()
     }

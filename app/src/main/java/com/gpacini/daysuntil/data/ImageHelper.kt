@@ -3,7 +3,6 @@ package com.gpacini.daysuntil.data
 import android.graphics.Bitmap
 import java.io.File
 import java.io.FileOutputStream
-import java.io.IOException
 
 /**
  * Created by gavinpacini on 10/10/15.

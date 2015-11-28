@@ -17,8 +17,7 @@ object RealmManager {
     public fun loadEvents(context: Context): Observable<ArrayList<Event>> {
         return RealmObservable.results(context, { realm ->
             realm.where(RealmEvent::class.java).findAllSorted("timestamp", false)
-        })
-        .map { realmEvents ->
+        }).map { realmEvents ->
             val events = ArrayList<Event>(realmEvents.size)
             for (realmEvent in realmEvents) {
                 events.add(Event(realmEvent))
