@@ -75,8 +75,7 @@
                     android:layout_weight="0.5"
                     android:layout_marginRight="@dimen/activity_horizontal_margin"
                     android:text="@string/discard"
-                    android:textColor="@color/accent"
-                    android:background="#0000"/>
+                    android:textColor="@color/accent"/>
 
                 <Button
                     style="?android:buttonBarButtonStyle"
@@ -86,9 +85,8 @@
                     android:layout_weight="0.5"
                     android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:text="@string/save"
-                    android:textColor="@color/light_grey"
-                    android:enabled="false"
-                    android:background="#0000"/>
+                    android:textColor="@color/primary_button_color"
+                    android:enabled="false"/>
             </LinearLayout>
 
         </LinearLayout>

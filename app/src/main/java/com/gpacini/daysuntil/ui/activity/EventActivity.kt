@@ -62,7 +62,7 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
 
     private var mDatePickerDialog: DatePickerDialog? = null
 
-    private var mCalendar: Calendar? = null
+    private var mCalendar: Calendar = Calendar.getInstance()
 
     private var mSubscriptions: CompositeSubscription? = null
 
@@ -97,9 +97,8 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
 
             mInputTitle.setText(mEvent?.title)
 
-            mCalendar = Calendar.getInstance()
-            mCalendar!!.timeInMillis = mEvent!!.timestamp
-            setDate(mCalendar!!.get(Calendar.YEAR), mCalendar!!.get(Calendar.MONTH), mCalendar!!.get(Calendar.DATE))
+            mCalendar.timeInMillis = mEvent!!.timestamp
+            setDate(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DATE))
 
             val imageHelper = ImageHelper.getInstance()
             loadImage(imageHelper.with(mEvent?.uuid))
@@ -111,12 +110,8 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
     }
 
     fun setupDateTimePickers() {
-        if (mCalendar == null) {
-            mCalendar = Calendar.getInstance()
-        }
-
-        mDatePickerDialog = DatePickerDialog.newInstance(this, mCalendar!!.get(Calendar.YEAR),
-                mCalendar!!.get(Calendar.MONTH), mCalendar!!.get(Calendar.DAY_OF_MONTH))
+        mDatePickerDialog = DatePickerDialog.newInstance(this, mCalendar.get(Calendar.YEAR),
+                mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH))
         mDatePickerDialog?.dismissOnPause(true)
     }
 
@@ -147,12 +142,12 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
 
         mButtonSave.setOnClickListener {
 
-            if (mButtonSave.isEnabled && mCalendar != null && imageBitmap != null && uuid != null) {
+            if (mButtonSave.isEnabled && imageBitmap != null && uuid != null) {
 
                 val imageHelper = ImageHelper.getInstance()
                 imageHelper.saveImage(imageBitmap, uuid)
 
-                mSubscriptions?.add(RealmManager.newEvent(this, mInputTitle.text.toString().trim(), uuid!!, mCalendar!!.timeInMillis)
+                mSubscriptions?.add(RealmManager.newEvent(this, mInputTitle.text.toString().trim(), uuid, mCalendar.timeInMillis)
                         .subscribe(object : RealmSubscriber<RealmEvent>() {
                             override fun onCompleted() {
                                 Toast.makeText(this@EventActivity, R.string.event_successfully_added, Toast.LENGTH_LONG).show()
@@ -172,10 +167,10 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
     }
 
     private fun setDate(year: Int, monthOfYear: Int, dayOfMonth: Int) {
-        mCalendar?.set(year, monthOfYear, dayOfMonth)
+        mCalendar.set(year, monthOfYear, dayOfMonth)
 
         val dateFormat = DateFormat.getDateInstance()
-        mInputDate.setText(dateFormat.format(mCalendar?.time))
+        mInputDate.setText(dateFormat.format(mCalendar.time))
     }
 
 
@@ -190,12 +185,10 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
     }
 
     private fun checkAllFields() {
-        if (mInputTitle.text.toString().isNotBlank() && mInputDate.text.toString().isNotBlank() && mCalendar != null && imageBitmap != null) {
+        if (mInputTitle.text.toString().isNotBlank() && mInputDate.text.toString().isNotBlank() && imageBitmap != null) {
             mButtonSave.isEnabled = true;
-            mButtonSave.setTextColor(R.color.primary)
         } else {
             mButtonSave.isEnabled = false;
-            mButtonSave.setTextColor(R.color.light_grey)
         }
     }
 
