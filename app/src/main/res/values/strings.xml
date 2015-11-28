@@ -3,6 +3,7 @@
     <string name="event_activity">Event Activity</string>
 
     <string name="event_successfully_added">Event added</string>
+    <string name="event_successfully_edited">Event edited</string>
     <string name="event_successfully_removed">Event removed</string>
 
     <string name="undo">Undo</string>

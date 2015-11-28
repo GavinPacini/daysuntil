@@ -62,11 +62,13 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
 
     private var mDatePickerDialog: DatePickerDialog? = null
 
-    private var mCalendar: Calendar = Calendar.getInstance()
+    private val mCalendar: Calendar = Calendar.getInstance()
 
     private var mSubscriptions: CompositeSubscription? = null
 
     private var mEvent: Event? = null
+
+    private var isEditingEvent = false
 
     private var uuid: String? = null
 
@@ -75,6 +77,7 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
         setContentView(R.layout.activity_event)
 
         mEvent = intent.getParcelableExtra(EXTRA_EVENT)
+        isEditingEvent = mEvent != null
 
         mSubscriptions = CompositeSubscription()
 
@@ -92,7 +95,7 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
         setSupportActionBar(mToolbar)
         supportActionBar.setDisplayHomeAsUpEnabled(true)
 
-        if (mEvent != null) {
+        if (isEditingEvent) {
             supportActionBar.title = resources.getString(R.string.edit_event)
 
             mInputTitle.setText(mEvent?.title)
@@ -150,7 +153,12 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
                 mSubscriptions?.add(RealmManager.newEvent(this, mInputTitle.text.toString().trim(), uuid, mCalendar.timeInMillis)
                         .subscribe(object : RealmSubscriber<RealmEvent>() {
                             override fun onCompleted() {
-                                Toast.makeText(this@EventActivity, R.string.event_successfully_added, Toast.LENGTH_LONG).show()
+
+                                val toastMessageResource =
+                                        if(isEditingEvent) R.string.event_successfully_edited
+                                        else R.string.event_successfully_added
+
+                                Toast.makeText(this@EventActivity, toastMessageResource, Toast.LENGTH_LONG).show()
                                 setResult(Activity.RESULT_OK, null)
                                 finish()
                             }
