@@ -26,9 +26,9 @@ I had been looking for something like this myself and couldn't find one. So, if 
 Requirements
 ------------
  - [Android SDK](http://developer.android.com/sdk/index.html)
- - Android SDK Build tools 23.0.1
+ - Android SDK Build tools 23.0.2
  - Android Support Repository and Library
- - Gradle Plugin 1.4.0-beta6 (For VectorDrawable support)
+ - Gradle Plugin 1.5.0
  
 Building
 --------
@@ -43,7 +43,6 @@ Possible Upcoming Features
  - Unit Tests
  - Automated Tests
  - Rx-ify more of the app
- - Searching for Images in Event Activity
  - Re-crop image without reselecting one in Event Activity
 
 *I need to write some tests*
@@ -57,7 +56,6 @@ Notes
 --------
 Due to the way Realm works, it's impossible to iterate over each individual result **as they are returned.** Realm returns a `RealmResult` object which contains the results of your query. Therefore, when using RxJava, it is not possible to call `onNext` for each result, you must call it only at the end after you have your `RealmResult` object.
 
-~~I wrote my `RealmObject` class `RealmEvent` in Java because I was having problems with the annotation processor not adding them to the Realm schema if I wrote it in Kotlin.~~ I have since fixed this by using the `kapt` method in my `build.gradle` file.
 
 Pull Requests
 --------
