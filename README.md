@@ -49,8 +49,7 @@ Possible Upcoming Features
 
 Minor Bugs
 --------
- - No support for state change in landscape
- - Handle refresh better after undoing
+ - After undoing the deletion of an event, the entire view refreshes. Quite annoying.
  
 Notes
 --------
