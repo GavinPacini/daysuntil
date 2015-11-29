@@ -15,7 +15,6 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.text.method.LinkMovementMethod
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -28,7 +27,6 @@ import com.gpacini.daysuntil.data.model.Event
 import com.gpacini.daysuntil.data.model.RealmEvent
 import com.gpacini.daysuntil.rx.RealmSubscriber
 import com.gpacini.daysuntil.ui.adapter.EventHolder
-import rx.android.schedulers.AndroidSchedulers
 import rx.subscriptions.CompositeSubscription
 import uk.co.ribot.easyadapter.EasyRecyclerAdapter
 import java.util.*
@@ -84,7 +82,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         mRecyclerView.layoutManager = LinearLayoutManager(this)
-        mRecyclerView.hasFixedSize()
         mEasyRecycleAdapter = EasyRecyclerAdapter<Event>(this, EventHolder::class.java)
         mRecyclerView.adapter = mEasyRecycleAdapter
 
@@ -96,7 +93,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val event = mEasyRecycleAdapter?.getItem(viewHolder.layoutPosition) ?: return
-                handleSwipe(event, viewHolder.layoutPosition)
+                handleSwipe(event)
             }
         }
 
@@ -109,12 +106,12 @@ class MainActivity : AppCompatActivity() {
         mAddEventFAB.setOnClickListener { startActivityForResult(EventActivity.getNewIntent(this), REQUEST_FROM_EVENT) }
     }
 
-    private fun handleSwipe(event: Event, position: Int) {
+    private fun handleSwipe(event: Event) {
         mSubscriptions?.add(RealmManager.removeEvent(this, event.uuid!!)
                 .subscribe(object : RealmSubscriber<Event>() {
                     override fun onNext(event: Event) {
                         if (mEasyRecycleAdapter?.removeItem(event) ?: false) {
-                            showUndo(event, position)
+                            showUndo(event)
                         }
                     }
                 })
@@ -154,7 +151,7 @@ class MainActivity : AppCompatActivity() {
         loadEvents()
     }
 
-    private fun showUndo(event: Event, position: Int) {
+    private fun showUndo(event: Event) {
         val snackBar = Snackbar
                 .make(mContainer, R.string.event_successfully_removed, Snackbar.LENGTH_LONG)
                 .setAction(R.string.undo, {
@@ -194,7 +191,7 @@ class MainActivity : AppCompatActivity() {
         makeLinkClickable(dialog)
     }
 
-    private fun makeLinkClickable(dialog: AlertDialog){
+    private fun makeLinkClickable(dialog: AlertDialog) {
         val messageTextView = dialog.findViewById(android.R.id.message) as? TextView
         messageTextView?.movementMethod = LinkMovementMethod.getInstance()
     }
