@@ -17,6 +17,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import butterknife.bindView
 import com.gpacini.daysuntil.R
 import com.gpacini.daysuntil.data.ImageHelper
 import com.gpacini.daysuntil.data.RealmManager
@@ -31,21 +32,20 @@ import rx.subscriptions.CompositeSubscription
 import java.io.File
 import java.text.DateFormat
 import java.util.*
-import kotlin.butterknife.bindView
 
 class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, TextWatcher {
 
     companion object Factory {
 
-        val EXTRA_EVENT = "com.gpacini.daysuntil.ui.activity.EventActivity.EXTRA_EVENT"
+        val EXTRA_EVENT = "EventActivity.EXTRA_EVENT"
 
-        public fun getEditIntent(context: Context, event: Event?): Intent {
+        fun getEditIntent(context: Context, event: Event?): Intent {
             val intent = Intent(context, EventActivity::class.java)
             intent.putExtra(EXTRA_EVENT, event)
             return intent
         }
 
-        public fun getNewIntent(context: Context): Intent {
+        fun getNewIntent(context: Context): Intent {
             val intent = Intent(context, EventActivity::class.java)
             return intent
         }
@@ -93,10 +93,10 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
 
     fun setupScreen() {
         setSupportActionBar(mToolbar)
-        supportActionBar.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         if (isEditingEvent) {
-            supportActionBar.title = resources.getString(R.string.edit_event)
+            supportActionBar?.title = resources.getString(R.string.edit_event)
 
             mInputTitle.setText(mEvent?.title)
 
@@ -107,7 +107,7 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
             loadImage(imageHelper.with(mEvent?.uuid))
             uuid = mEvent?.uuid
         } else {
-            supportActionBar.title = resources.getString(R.string.add_event)
+            supportActionBar?.title = resources.getString(R.string.add_event)
             uuid = UUID.randomUUID().toString()
         }
     }
@@ -200,7 +200,7 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
         }
     }
 
-    override protected fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == Crop.REQUEST_PICK) {
                 val destination = Uri.fromFile(File(cacheDir, "cropped"))

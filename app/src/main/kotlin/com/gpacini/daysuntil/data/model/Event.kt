@@ -8,9 +8,9 @@ import android.os.Parcelable
  */
 class Event : Parcelable {
 
-    public var uuid: String? = null
-    public var title: String? = null
-    public var timestamp: Long = 0
+    var uuid: String? = null
+    var title: String? = null
+    var timestamp: Long = 0
 
     override fun describeContents(): Int = 0
 

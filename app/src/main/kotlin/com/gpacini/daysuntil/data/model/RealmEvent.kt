@@ -6,12 +6,12 @@ import io.realm.annotations.PrimaryKey
 /**
  * Created by gavinpacini on 10/10/15.
  */
-public open class RealmEvent : RealmObject() {
+open class RealmEvent : RealmObject() {
 
     @PrimaryKey
-    public open var uuid: String? = null
+    open var uuid: String? = null
 
-    public open var title: String? = null
+    open var title: String? = null
 
-    public open var timestamp: Long = 0
+    open var timestamp: Long = 0
 }

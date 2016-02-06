@@ -14,23 +14,23 @@ class ImageHelper {
             ImageHelper()
         }
 
-        public fun getInstance(): ImageHelper {
+        fun getInstance(): ImageHelper {
             return instanceImageHelper
         }
 
     }
 
-    public var filePath: String? = null
+    var filePath: String? = null
 
-    public fun init(filePath: String) {
+    fun init(filePath: String) {
         this.filePath = filePath
     }
 
-    public fun with(uuid: String?): String {
+    fun with(uuid: String?): String {
         return "file://${filePath}/${uuid}.jpg"
     }
 
-    public fun saveImage(bmp: Bitmap?, uuid: String?) {
+    fun saveImage(bmp: Bitmap?, uuid: String?) {
 
         val folder = File(filePath)
         val imageFile = File(filePath + "/${uuid}.jpg")
@@ -48,7 +48,7 @@ class ImageHelper {
         }
     }
 
-    public fun deleteImage(uuid: String?) {
+    fun deleteImage(uuid: String?) {
 
         val imageFile = File(filePath + "/${uuid}.jpg")
 

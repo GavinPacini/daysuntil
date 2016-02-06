@@ -20,6 +20,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
+import butterknife.bindView
 import com.gpacini.daysuntil.R
 import com.gpacini.daysuntil.data.ImageHelper
 import com.gpacini.daysuntil.data.RealmManager
@@ -30,12 +31,11 @@ import com.gpacini.daysuntil.ui.adapter.EventHolder
 import rx.subscriptions.CompositeSubscription
 import uk.co.ribot.easyadapter.EasyRecyclerAdapter
 import java.util.*
-import kotlin.butterknife.bindView
 
 class MainActivity : AppCompatActivity() {
 
     companion object Factory {
-        public val REQUEST_FROM_EVENT: Int = 1
+        val REQUEST_FROM_EVENT: Int = 1
     }
 
     private val mContainer: CoordinatorLayout by bindView(R.id.container_main)
@@ -137,7 +137,7 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    override protected fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_FROM_EVENT) {
             if (resultCode == Activity.RESULT_OK) {
                 reloadEvents()
