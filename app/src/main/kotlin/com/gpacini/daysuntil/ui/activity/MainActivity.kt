@@ -121,11 +121,12 @@ class MainActivity : AppCompatActivity() {
                     mEasyRecycleAdapter?.items?.let { items ->
                         if (items.contains(event) != true) {
 
-                            if (event.position < items.size)
+                            if (event.position < items.size) {
                                 if (items[event.position]?.uuid == event.uuid) {
                                     items.removeAt(event.position)
                                     Log.d("one removed", "at position: ${event.position}")
                                 }
+                            }
 
                             items.add(event.position, event)
                             mEasyRecycleAdapter?.notifyDataSetChanged()
