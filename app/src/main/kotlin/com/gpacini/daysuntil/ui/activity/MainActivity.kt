@@ -114,7 +114,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun loadEvents(){
+    private fun loadEvents() {
         mListSubscription = realmManager.loadEvents()
                 .subscribe({ event ->
 

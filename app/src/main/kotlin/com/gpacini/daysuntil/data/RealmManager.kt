@@ -40,7 +40,6 @@ class RealmManager {
                 .map { realmEvent ->
                     val event = Event(realmEvent)
                     event.position = position
-                    Log.d("position", "$position")
                     position++
                     event
                 }

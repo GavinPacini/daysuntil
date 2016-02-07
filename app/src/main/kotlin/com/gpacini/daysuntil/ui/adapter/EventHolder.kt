@@ -8,7 +8,6 @@ import com.gpacini.daysuntil.R
 import com.gpacini.daysuntil.data.ImageHelper
 import com.gpacini.daysuntil.data.model.Event
 import com.gpacini.daysuntil.ui.activity.EventActivity
-import com.gpacini.daysuntil.ui.activity.MainActivity
 import com.nostra13.universalimageloader.core.ImageLoader
 import uk.co.ribot.easyadapter.ItemViewHolder
 import uk.co.ribot.easyadapter.PositionInfo
