@@ -58,8 +58,8 @@ class EventHolder(view: View) : ItemViewHolder<Event>(view) {
 
     override fun onSetListeners() {
         mImageEvent?.setOnClickListener {
-            (context as? AppCompatActivity)?.startActivityForResult(
-                    EventActivity.getEditIntent(context, item), MainActivity.REQUEST_FROM_EVENT)
+            (context as? AppCompatActivity)?.startActivity(
+                    EventActivity.getEditIntent(context, item))
         }
     }
 }

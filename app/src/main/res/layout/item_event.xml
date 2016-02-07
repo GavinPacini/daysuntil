@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+<android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -28,7 +27,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
                 android:scaleType="centerCrop"
-                android:background="@color/primary_light"/>
+                android:background="@color/primary_light" />
 
             <TextView
                 android:id="@+id/text_time"
@@ -39,7 +38,7 @@
                 android:layout_alignBottom="@+id/image_event"
                 android:textColor="@color/white"
                 android:textStyle="bold"
-                android:text="TIME UNTIL"/>
+                android:text="TIME UNTIL" />
 
         </RelativeLayout>
 
@@ -57,7 +56,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black_87pc"
                 android:textStyle="bold"
-                android:text="EVENT TITLE GOES HERE"/>
+                android:text="EVENT TITLE GOES HERE" />
 
         </RelativeLayout>
 

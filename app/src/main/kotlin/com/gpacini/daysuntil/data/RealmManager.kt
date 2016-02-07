@@ -1,52 +1,72 @@
 package com.gpacini.daysuntil.data
 
-import android.content.Context
+import android.util.Log
 import com.gpacini.daysuntil.data.model.Event
 import com.gpacini.daysuntil.data.model.RealmEvent
-import com.kboyarshinov.realmrxjava.rx.RealmObservable
+import io.realm.Realm
+import io.realm.RealmAsyncTask
+import io.realm.Sort
 import rx.Observable
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
-import java.util.*
 
 /**
  * Created by gavinpacini on 10/10/15.
  */
-object RealmManager {
+class RealmManager {
 
-    fun loadEvents(context: Context): Observable<ArrayList<Event>> {
-        return RealmObservable.results(context, { realm ->
-            realm.where(RealmEvent::class.java).findAllSorted("timestamp", false)
-        }).map { realmEvents ->
-            val events = ArrayList<Event>(realmEvents.size)
-            for (realmEvent in realmEvents) {
-                events.add(Event(realmEvent))
-            }
-            events
-        }.androidThreads()
+    private var realm = Realm.getDefaultInstance()
+
+    private var position = 0
+
+    fun hasEvents(): Observable<Boolean> {
+
+        return realm.where(RealmEvent::class.java)
+                .findAllAsync()
+                .asObservable()
+                .map { realmEvents ->
+                    !realmEvents.isEmpty()
+                }
     }
 
-    fun newEvent(context: Context, title: String?, uuid: String?, timestamp: Long): Observable<RealmEvent> {
-        return RealmObservable.obj(context, { realm ->
+    fun loadEvents(): Observable<Event> {
+
+        return realm.where(RealmEvent::class.java)
+                .findAllSortedAsync("timestamp", Sort.DESCENDING)
+                .asObservable()
+                .map { realmEvents ->
+                    position = 0
+                    realmEvents
+                }
+                .flatMap { Observable.from(it) }
+                .map { realmEvent ->
+                    val event = Event(realmEvent)
+                    event.position = position
+                    Log.d("position", "$position")
+                    position++
+                    event
+                }
+    }
+
+    fun newEvent(title: String?, uuid: String?, timestamp: Long): Observable<RealmAsyncTask> {
+
+        return Observable.just(realm.executeTransaction({ realm ->
             val event = RealmEvent()
             event.title = title
             event.uuid = uuid
             event.timestamp = timestamp
             realm.copyToRealmOrUpdate(event)
-        }).androidThreads()
+        }, null))
     }
 
-    fun removeEvent(context: Context, uuid: String?): Observable<Event> {
-        return RealmObservable.remove(context, { realm ->
+    fun removeEvent(uuid: String?): Observable<RealmAsyncTask> {
+
+        return Observable.just(realm.executeTransaction({ realm ->
             val realmEvent = realm.where(RealmEvent::class.java).equalTo("uuid", uuid).findFirst()
-            val event = Event(realmEvent)
             realmEvent.removeFromRealm()
-            event
-        }).androidThreads()
+        }, null))
     }
 
-    fun <T> Observable<T>.androidThreads(): Observable<T> {
-        return this.observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.newThread())
+    fun close() {
+        realm.close()
     }
+
 }

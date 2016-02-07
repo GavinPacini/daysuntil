@@ -11,6 +11,7 @@ class Event : Parcelable {
     var uuid: String? = null
     var title: String? = null
     var timestamp: Long = 0
+    var position: Int = 0
 
     override fun describeContents(): Int = 0
 
@@ -53,7 +54,7 @@ class Event : Parcelable {
 
     companion object {
 
-        val CREATOR: Parcelable.Creator<Event> = object : Parcelable.Creator<Event> {
+        @JvmField final val CREATOR: Parcelable.Creator<Event> = object : Parcelable.Creator<Event> {
             override fun createFromParcel(source: Parcel): Event {
                 return Event(source)
             }

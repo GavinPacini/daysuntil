@@ -10,7 +10,7 @@ What do I mean by "more"? Here's exactly what I've made extensive use of:
 
  - [Kotlin](https://kotlinlang.org/)
  - [RxJava](https://github.com/ReactiveX/RxJava) and [RxAndroid](https://github.com/ReactiveX/RxAndroid)
- - [Realm](https://realm.io/) with help from [Realm with RxJava](https://github.com/kboyarshinov/realm-rxjava-example)
+ - [Realm](https://realm.io/)
  - [EasyAdapter](https://github.com/ribot/easy-adapter)
  - [Kotter Knife](https://github.com/JakeWharton/kotterknife)
  - [Material DateTime Picker](https://github.com/wdullaer/MaterialDateTimePicker)
@@ -46,15 +46,6 @@ Possible Upcoming Features
  - Re-crop image without reselecting one in Event Activity
 
 *I need to write some tests*
-
-Minor Bugs
---------
- - After undoing the deletion of an event, the entire view refreshes. Quite annoying.
- 
-Notes
---------
-Due to the way Realm works, it's impossible to iterate over each individual result **as they are returned.** Realm returns a `RealmResult` object which contains the results of your query. Therefore, when using RxJava, it is not possible to call `onNext` for each result, you must call it only at the end after you have your `RealmResult` object.
-
 
 Pull Requests
 --------

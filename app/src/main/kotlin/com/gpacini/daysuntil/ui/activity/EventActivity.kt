@@ -22,8 +22,6 @@ import com.gpacini.daysuntil.R
 import com.gpacini.daysuntil.data.ImageHelper
 import com.gpacini.daysuntil.data.RealmManager
 import com.gpacini.daysuntil.data.model.Event
-import com.gpacini.daysuntil.data.model.RealmEvent
-import com.gpacini.daysuntil.rx.RealmSubscriber
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener
 import com.soundcloud.android.crop.Crop
@@ -64,13 +62,15 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
 
     private val mCalendar: Calendar = Calendar.getInstance()
 
-    private var mSubscriptions: CompositeSubscription? = null
+    private var mSubscriptions: CompositeSubscription = CompositeSubscription()
 
     private var mEvent: Event? = null
 
     private var isEditingEvent = false
 
     private var uuid: String? = null
+
+    private var realmManager: RealmManager = RealmManager()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,8 +79,6 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
         mEvent = intent.getParcelableExtra(EXTRA_EVENT)
         isEditingEvent = mEvent != null
 
-        mSubscriptions = CompositeSubscription()
-
         setupScreen()
         setupDateTimePickers()
         setupListeners()
@@ -88,7 +86,8 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
 
     override fun onDestroy() {
         super.onDestroy()
-        mSubscriptions?.unsubscribe()
+        mSubscriptions.unsubscribe()
+        realmManager.close()
     }
 
     fun setupScreen() {
@@ -150,18 +149,14 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
                 val imageHelper = ImageHelper.getInstance()
                 imageHelper.saveImage(imageBitmap, uuid)
 
-                mSubscriptions?.add(RealmManager.newEvent(this, mInputTitle.text.toString().trim(), uuid, mCalendar.timeInMillis)
-                        .subscribe(object : RealmSubscriber<RealmEvent>() {
-                            override fun onCompleted() {
+                mSubscriptions.add(realmManager.newEvent(mInputTitle.text.toString().trim(), uuid, mCalendar.timeInMillis)
+                        .subscribe({
+                            val toastMessageResource =
+                                    if (isEditingEvent) R.string.event_successfully_edited
+                                    else R.string.event_successfully_added
 
-                                val toastMessageResource =
-                                        if (isEditingEvent) R.string.event_successfully_edited
-                                        else R.string.event_successfully_added
-
-                                Toast.makeText(this@EventActivity, toastMessageResource, Toast.LENGTH_LONG).show()
-                                setResult(Activity.RESULT_OK, null)
-                                finish()
-                            }
+                            Toast.makeText(this@EventActivity, toastMessageResource, Toast.LENGTH_LONG).show()
+                            finish()
                         })
                 )
             }
