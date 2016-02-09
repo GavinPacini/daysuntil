@@ -2,9 +2,8 @@ Days Until
 ===================
 A simple Android app demonstrating the use of Kotlin, RxJava, Realm and more...
 
-[![Get it on Google Play](http://www.android.com/images/brand/get_it_on_play_logo_small.png)](https://play.google.com/store/apps/details?id=com.gpacini.daysuntil)
-
 <p align="center">
+    [![Get it on Google Play](http://www.android.com/images/brand/get_it_on_play_logo_large.png)](https://play.google.com/store/apps/details?id=com.gpacini.daysuntil)
     <img src="images/list.png" alt="Web Launcher"/>
 </p>
 
