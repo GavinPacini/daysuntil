@@ -1,7 +1,13 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
+apply plugin: "com.android.application"
+apply plugin: "kotlin-android"
+apply plugin: "io.fabric"
 
 android {
+
+    signingConfigs {
+        release
+    }
+
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
 
@@ -14,26 +20,28 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
         }
     }
     packagingOptions {
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'LICENSE.txt'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/NOTICE'
+        exclude "META-INF/DEPENDENCIES"
+        exclude "LICENSE.txt"
+        exclude "META-INF/LICENSE"
+        exclude "META-INF/LICENSE.txt"
+        exclude "META-INF/NOTICE"
     }
     sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
+        main.java.srcDirs += "src/main/kotlin"
     }
 }
 
 dependencies {
-    final SUPPORT_LIBRARY_VERSION = '23.1.1'
+    final SUPPORT_LIBRARY_VERSION = "23.1.1"
 
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(dir: "libs", include: ["*.jar"])
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     compile "com.android.support:support-v4:$SUPPORT_LIBRARY_VERSION"
@@ -43,23 +51,28 @@ dependencies {
     compile "com.android.support:recyclerview-v7:$SUPPORT_LIBRARY_VERSION"
     compile "com.android.support:support-annotations:$SUPPORT_LIBRARY_VERSION"
 
-    compile 'io.reactivex:rxandroid:1.1.0'
-    compile 'io.reactivex:rxjava:1.1.0'
+    compile "io.reactivex:rxandroid:1.1.0"
+    compile "io.reactivex:rxjava:1.1.0"
+    compile "com.artemzin.rxjava:proguard-rules:1.1.0.0"
 
-    compile 'io.realm:realm-android:0.87.4'
+    compile "io.realm:realm-android:0.87.4"
 
-    compile 'uk.co.ribot:easyadapter:1.5.0@aar'
+    compile "uk.co.ribot:easyadapter:1.5.0@aar"
 
-    compile 'com.wdullaer:materialdatetimepicker:2.1.1'
+    compile "com.wdullaer:materialdatetimepicker:2.1.1"
 
-    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
-    compile 'com.soundcloud.android:android-crop:1.0.1@aar'
+    compile "com.nostra13.universalimageloader:universal-image-loader:1.9.5"
+    compile "com.soundcloud.android:android-crop:1.0.1@aar"
 
-    kapt 'io.realm:realm-android:0.87.4'
+    kapt "io.realm:realm-android:0.87.4"
+
+    compile("com.crashlytics.sdk.android:crashlytics:2.5.5@aar") {
+        transitive = true;
+    }
 }
 
 buildscript {
-    ext.kotlin_version = '1.0.0-rc-1036'
+    ext.kotlin_version = "1.0.0-rc-1036"
     repositories {
         jcenter()
     }
@@ -70,4 +83,16 @@ buildscript {
 
 repositories {
     jcenter()
+    maven { url "https://maven.fabric.io/public" }
 }
+
+def props = new Properties()
+
+props.load(new FileInputStream(rootProject.file("release.properties")))
+
+android.signingConfigs.release.storeFile file(props.keyStore)
+android.signingConfigs.release.storePassword props.keyStorePassword
+android.signingConfigs.release.keyAlias props.keyAlias
+android.signingConfigs.release.keyPassword props.keyAliasPassword
+
+android.defaultConfig.manifestPlaceholders = [fabricApiKey:"$props.fabricApiKey"]

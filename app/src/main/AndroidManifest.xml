@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.gpacini.daysuntil">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".DaysUntilApplication"
         android:allowBackup="true"
@@ -30,8 +32,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.activity.MainActivity" />
         </activity>
-
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="${fabricApiKey}" />
     </application>
 
 </manifest>
