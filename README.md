@@ -3,7 +3,7 @@ Days Until
 A simple Android app demonstrating the use of Kotlin, RxJava, Realm and more...
 
 <p align="center">
-    <img src="images/device.png" alt="Web Launcher"/>
+    <img src="images/list.png" alt="Web Launcher"/>
 </p>
 
 What do I mean by "more"? Here's exactly what I've made extensive use of:
