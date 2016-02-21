@@ -30,30 +30,48 @@ class ImageHelper {
         return "file://${filePath}/${uuid}.jpg"
     }
 
-    fun saveImage(bmp: Bitmap?, uuid: String?) {
+    fun withCrop(uuid: String?): String {
+        return "file://${filePath}/${uuid}_crop.jpg"
+    }
+
+    fun saveImage(bmp: Bitmap?, bmpCrop: Bitmap?, uuid: String?) {
 
         val folder = File(filePath)
         val imageFile = File(filePath + "/${uuid}.jpg")
+        val imageFileCrop = File(filePath + "/${uuid}_crop.jpg")
 
         if (!folder.exists()) {
-            folder.mkdir();
+            folder.mkdir()
         }
 
         if (!imageFile.exists()) {
-            imageFile.createNewFile();
+            imageFile.createNewFile()
+        }
+
+        if (!imageFileCrop.exists()) {
+            imageFileCrop.createNewFile()
         }
 
         FileOutputStream(imageFile).use {
             bmp?.compress(Bitmap.CompressFormat.JPEG, 85, it)
+        }
+
+        FileOutputStream(imageFileCrop).use {
+            bmpCrop?.compress(Bitmap.CompressFormat.JPEG, 85, it)
         }
     }
 
     fun deleteImage(uuid: String?) {
 
         val imageFile = File(filePath + "/${uuid}.jpg")
+        val imageFileCrop = File(filePath + "/${uuid}_crop.jpg")
 
         if (imageFile.exists()) {
             imageFile.delete()
+        }
+
+        if (imageFileCrop.exists()) {
+            imageFileCrop.delete()
         }
     }
 }

@@ -31,7 +31,7 @@ class EventHolder(view: View) : ItemViewHolder<Event>(view) {
         //Display image for event in card
         val imageLoader = ImageLoader.getInstance()
         val imageHelper = ImageHelper.getInstance()
-        imageLoader.displayImage(imageHelper.with(event.uuid), mImageEvent!!)
+        imageLoader.displayImage(imageHelper.withCrop(event.uuid), mImageEvent!!)
 
         mTextTitle?.text = event.title
 

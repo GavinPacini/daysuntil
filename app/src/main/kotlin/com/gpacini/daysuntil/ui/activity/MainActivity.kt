@@ -19,6 +19,7 @@ import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import butterknife.bindView
+import com.gpacini.daysuntil.BuildConfig
 import com.gpacini.daysuntil.R
 import com.gpacini.daysuntil.data.ImageHelper
 import com.gpacini.daysuntil.data.RealmManager
@@ -37,11 +38,12 @@ class MainActivity : AppCompatActivity() {
     private val mTextAddEvent: TextView by bindView(R.id.text_add_event)
     private val mAddEventFAB: FloatingActionButton by bindView(R.id.add_event_fab)
 
-    private var mSubscriptions: CompositeSubscription = CompositeSubscription()
+    private val mSubscriptions: CompositeSubscription = CompositeSubscription()
+    private val realmManager: RealmManager = RealmManager()
+
     private var mListSubscription: Subscription? = null
     private var mEasyRecycleAdapter: EasyRecyclerAdapter<Event>? = null
 
-    private var realmManager: RealmManager = RealmManager()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +52,11 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(mToolbar)
         setupRecyclerView()
         checkEvents()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mEasyRecycleAdapter?.notifyDataSetChanged()
     }
 
     override fun onDestroy() {
@@ -98,7 +105,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkEvents() {
-
         mSubscriptions.add(realmManager.hasEvents()
                 .subscribe({ hasEvents ->
                     if (hasEvents) {
@@ -111,29 +117,15 @@ class MainActivity : AppCompatActivity() {
                     mProgressBar.visibility = View.GONE
                 })
         )
-
     }
 
     private fun loadEvents() {
+        mListSubscription?.unsubscribe()
         mListSubscription = realmManager.loadEvents()
-                .subscribe({ event ->
+                .subscribe({ events ->
+                    Log.d("events", "${events.size}")
 
-                    mEasyRecycleAdapter?.items?.let { items ->
-                        if (items.contains(event) != true) {
-
-                            if (event.position < items.size) {
-                                if (items[event.position]?.uuid == event.uuid) {
-                                    items.removeAt(event.position)
-                                    Log.d("one removed", "at position: ${event.position}")
-                                }
-                            }
-
-                            items.add(event.position, event)
-                            mEasyRecycleAdapter?.notifyDataSetChanged()
-
-                        }
-                    }
-
+                    mEasyRecycleAdapter?.items = events
                 })
     }
 
@@ -168,11 +160,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showInfoDialog() {
+        val informationStringResource =
+                if (BuildConfig.DEBUG) R.string.information_dialog_debug
+                else R.string.information_dialog
 
         val dialog = AlertDialog.Builder(this)
                 .setTitle(R.string.information_heading)
-                .setMessage(R.string.information_dialog)
-                .setPositiveButton(R.string.ok, { dialog, num -> dialog.dismiss() })
+                .setMessage(informationStringResource)
+                .setPositiveButton(android.R.string.ok, { dialog, num -> dialog.dismiss() })
                 .show()
 
         makeLinkClickable(dialog)

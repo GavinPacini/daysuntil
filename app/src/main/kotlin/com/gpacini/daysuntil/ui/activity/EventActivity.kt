@@ -7,6 +7,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
@@ -53,24 +54,24 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
     private val mInputTitle: EditText by bindView(R.id.input_title)
     private val mInputDate: EditText by bindView(R.id.input_date)
     private val mInputImage: ImageView by bindView(R.id.input_image)
+    private val mRecropImage: ImageView by bindView(R.id.recrop_image)
     private val mButtonDiscard: Button by bindView(R.id.btn_discard)
     private val mButtonSave: Button by bindView(R.id.btn_save)
 
-    private var imageBitmap: Bitmap? = null
-
+    private var imageBitmapCrop: Bitmap? = null
+    private var fullImageLocation: Uri? = null
     private var mDatePickerDialog: DatePickerDialog? = null
-
-    private val mCalendar: Calendar = Calendar.getInstance()
-
-    private var mSubscriptions: CompositeSubscription = CompositeSubscription()
-
+    private var uuid: String? = null
     private var mEvent: Event? = null
 
     private var isEditingEvent = false
+    private var hasMadeChanges = false
 
-    private var uuid: String? = null
+    private val realmManager: RealmManager = RealmManager()
+    private val mCalendar: Calendar = Calendar.getInstance()
+    private val mSubscriptions: CompositeSubscription = CompositeSubscription()
 
-    private var realmManager: RealmManager = RealmManager()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,7 +104,9 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
             setDate(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DATE))
 
             val imageHelper = ImageHelper.getInstance()
-            loadImage(imageHelper.with(mEvent?.uuid))
+            fullImageLocation = Uri.parse(imageHelper.with(mEvent?.uuid))
+            loadImage(imageHelper.withCrop(mEvent?.uuid))
+
             uuid = mEvent?.uuid
         } else {
             supportActionBar?.title = resources.getString(R.string.add_event)
@@ -128,14 +131,14 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
         mInputDate.setOnClickListener { controlDialog(mDatePickerDialog, true, "dpd") }
         mInputDate.setOnFocusChangeListener { view, b -> controlDialog(mDatePickerDialog, b, "dpd") }
 
-        mInputImage.setOnClickListener { Crop.pickImage(this); }
+        mInputImage.setOnClickListener { Crop.pickImage(this) }
 
         mButtonDiscard.setOnClickListener {
-            if (mButtonSave.isEnabled) {
+            if (hasMadeChanges) {
                 AlertDialog.Builder(this)
-                        .setTitle("Are you sure?")
-                        .setPositiveButton("Yes", { dialog, num -> finish() })
-                        .setNegativeButton("No", { dialog, num -> dialog.dismiss() })
+                        .setTitle(R.string.are_you_sure_dialog)
+                        .setPositiveButton(android.R.string.yes, { dialog, num -> finish() })
+                        .setNegativeButton(android.R.string.no, { dialog, num -> dialog.dismiss() })
                         .show()
             } else {
                 finish()
@@ -144,10 +147,11 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
 
         mButtonSave.setOnClickListener {
 
-            if (mButtonSave.isEnabled && imageBitmap != null && uuid != null) {
+            if (mButtonSave.isEnabled) {
 
                 val imageHelper = ImageHelper.getInstance()
-                imageHelper.saveImage(imageBitmap, uuid)
+                val imageBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, fullImageLocation)
+                imageHelper.saveImage(imageBitmap, imageBitmapCrop, uuid)
 
                 mSubscriptions.add(realmManager.newEvent(mInputTitle.text.toString().trim(), uuid, mCalendar.timeInMillis)
                         .subscribe({
@@ -179,6 +183,7 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
 
     override fun afterTextChanged(s: Editable?) {
         checkAllFields()
+        hasMadeChanges = true
     }
 
     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -188,32 +193,53 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
     }
 
     private fun checkAllFields() {
-        if (mInputTitle.text.toString().isNotBlank() && mInputDate.text.toString().isNotBlank() && imageBitmap != null) {
-            mButtonSave.isEnabled = true;
+        if (mInputTitle.text.toString().isNotBlank() && mInputDate.text.toString().isNotBlank()
+                && imageBitmapCrop != null) {
+            mButtonSave.isEnabled = true
         } else {
-            mButtonSave.isEnabled = false;
+            mButtonSave.isEnabled = false
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == Crop.REQUEST_PICK) {
+                fullImageLocation = data?.data
+
                 val destination = Uri.fromFile(File(cacheDir, "cropped"))
-                Crop.of(data?.data, destination).withAspect(mInputImage.width, mInputImage.height).start(this)
+                Crop.of(data?.data, destination).withAspect(mInputImage.width, mInputImage.height)
+                        .start(this)
             } else if (requestCode == Crop.REQUEST_CROP) {
                 loadImage(Crop.getOutput(data).toString())
             }
         }
     }
 
+    override fun onBackPressed(){
+        mButtonDiscard.callOnClick()
+    }
+
     private fun loadImage(imageURI: String) {
+
+        hasMadeChanges = true
+
         val imageLoader = ImageLoader.getInstance()
         imageLoader.displayImage(imageURI, mInputImage, object : SimpleImageLoadingListener() {
             override fun onLoadingComplete(imageUri: String?, view: View?, loadedImage: Bitmap?) {
                 mInputImage.scaleType = ImageView.ScaleType.CENTER_CROP
-                imageBitmap = loadedImage
+                imageBitmapCrop = loadedImage
                 checkAllFields()
             }
         })
+
+        mRecropImage.visibility = View.VISIBLE
+        mRecropImage.isClickable = true
+
+        mRecropImage.setOnClickListener {
+            val destination = Uri.fromFile(File(cacheDir, "cropped"))
+            Crop.of(fullImageLocation, destination)
+                    .withAspect(mInputImage.width, mInputImage.height)
+                    .start(this)
+        }
     }
 }

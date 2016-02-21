@@ -43,8 +43,6 @@ Possible Upcoming Features
 --------
  - Unit Tests
  - Automated Tests
- - Rx-ify more of the app
- - Re-crop image without reselecting one in Event Activity
 
 *I need to write some tests*
 

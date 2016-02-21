@@ -11,7 +11,6 @@ class Event : Parcelable {
     var uuid: String? = null
     var title: String? = null
     var timestamp: Long = 0
-    var position: Int = 0
 
     override fun describeContents(): Int = 0
 
@@ -39,9 +38,8 @@ class Event : Parcelable {
 
         val event = other as Event?
 
-        if (timestamp != event?.timestamp) return false
-        if (uuid != event?.uuid) return false
-        return title == event?.title
+        if (uuid == event?.uuid) return true
+        return false
 
     }
 
