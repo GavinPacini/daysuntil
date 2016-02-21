@@ -98,7 +98,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback);
+        val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
         itemTouchHelper.attachToRecyclerView(mRecyclerView)
 
         mAddEventFAB.setOnClickListener { startActivity(EventActivity.getNewIntent(this)) }

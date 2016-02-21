@@ -17,7 +17,7 @@ class DaysUntilApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(this));
+        ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(this))
 
         //Set path to store cropped and compressed images
         val appPath = this.filesDir.absolutePath
