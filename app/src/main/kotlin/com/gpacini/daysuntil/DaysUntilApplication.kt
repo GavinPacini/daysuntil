@@ -17,17 +17,19 @@ class DaysUntilApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        //Setup ImageLoader
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(this))
 
-        //Set path to store cropped and compressed images
+        //Set path to store event images
         val appPath = this.filesDir.absolutePath
         ImageHelper.getInstance().init("${appPath}/images")
 
         //Setup Realm
         val config = RealmConfiguration.Builder(this).build()
-
         Realm.setDefaultConfiguration(config)
 
+        //Setup Crashlytics
         if(!BuildConfig.DEBUG) {
             Fabric.with(this, Crashlytics())
         }
