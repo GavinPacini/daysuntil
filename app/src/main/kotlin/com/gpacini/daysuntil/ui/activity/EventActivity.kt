@@ -210,6 +210,8 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
                 Crop.of(data?.data, destination).withAspect(mInputImage.width, mInputImage.height)
                         .start(this)
             } else if (requestCode == Crop.REQUEST_CROP) {
+                hasMadeChanges = true
+
                 loadImage(Crop.getOutput(data).toString())
             }
         }
@@ -220,9 +222,6 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
     }
 
     private fun loadImage(imageURI: String) {
-
-        hasMadeChanges = true
-
         val imageLoader = ImageLoader.getInstance()
         imageLoader.displayImage(imageURI, mInputImage, object : SimpleImageLoadingListener() {
             override fun onLoadingComplete(imageUri: String?, view: View?, loadedImage: Bitmap?) {

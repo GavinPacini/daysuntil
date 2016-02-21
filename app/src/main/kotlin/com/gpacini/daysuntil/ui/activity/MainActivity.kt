@@ -160,9 +160,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showInfoDialog() {
-        val informationStringResource =
-                if (BuildConfig.DEBUG) R.string.information_dialog_debug
-                else R.string.information_dialog
+        val informationStringResource = R.string.information_dialog
 
         val dialog = AlertDialog.Builder(this)
                 .setTitle(R.string.information_heading)
