@@ -19,7 +19,6 @@ import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import butterknife.bindView
-import com.gpacini.daysuntil.BuildConfig
 import com.gpacini.daysuntil.R
 import com.gpacini.daysuntil.data.ImageHelper
 import com.gpacini.daysuntil.data.RealmManager

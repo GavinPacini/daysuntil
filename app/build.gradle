@@ -15,6 +15,7 @@ android {
         applicationId "com.gpacini.daysuntil"
         minSdkVersion 15
         targetSdkVersion 23
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         versionCode 2
         versionName "1.1"
     }
@@ -47,6 +48,7 @@ dependencies {
     final SUPPORT_LIBRARY_VERSION = "23.1.1"
 
     compile fileTree(dir: "libs", include: ["*.jar"])
+
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     compile "com.android.support:support-v4:$SUPPORT_LIBRARY_VERSION"
@@ -61,6 +63,7 @@ dependencies {
     compile "com.artemzin.rxjava:proguard-rules:1.1.0.0"
 
     compile "io.realm:realm-android:0.87.4"
+    kapt "io.realm:realm-android:0.87.4"
 
     compile "uk.co.ribot:easyadapter:1.5.0@aar"
 
@@ -69,11 +72,15 @@ dependencies {
     compile "com.nostra13.universalimageloader:universal-image-loader:1.9.5"
     compile "com.soundcloud.android:android-crop:1.0.1@aar"
 
-    kapt "io.realm:realm-android:0.87.4"
-
     compile("com.crashlytics.sdk.android:crashlytics:2.5.5@aar") {
         transitive = true;
     }
+
+    androidTestCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
+    androidTestCompile "com.android.support:support-annotations:$SUPPORT_LIBRARY_VERSION"
+    androidTestCompile "com.android.support.test:runner:0.4"
+    androidTestCompile "com.android.support.test:rules:0.4"
+    androidTestCompile "com.android.support.test.espresso:espresso-core:2.2.1"
 }
 
 buildscript {

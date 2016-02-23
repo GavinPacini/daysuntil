@@ -12,7 +12,7 @@ import rx.Observable
  */
 class RealmManager {
 
-    private var realm = Realm.getDefaultInstance()
+    var realm = Realm.getDefaultInstance()
 
     fun hasEvents(): Observable<Boolean> {
 
