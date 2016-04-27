@@ -18,7 +18,7 @@
 
     <string name="no_events_added">No events added.\nPress \'+\' below to add one.</string>
 
-    <string name="information_dialog"><a href="https://github.com/GavinThePacMan/daysuntil">View on GitHub</a>\n\nCopyright 2015 Gavin Pacini</string>
+    <string name="information_dialog"><a href="https://github.com/GavinPacini/daysuntil">View on GitHub</a>\n\nCopyright 2015 Gavin Pacini</string>
 
     <string name="are_you_sure_dialog">Are you sure you want to discard your changes?</string>
 </resources>

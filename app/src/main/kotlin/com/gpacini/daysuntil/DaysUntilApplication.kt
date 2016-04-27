@@ -1,11 +1,8 @@
 package com.gpacini.daysuntil
 
 import android.app.Application
-import android.os.Build
 import com.crashlytics.android.Crashlytics
 import com.gpacini.daysuntil.data.ImageHelper
-import com.nostra13.universalimageloader.core.ImageLoader
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
 import io.fabric.sdk.android.Fabric
 import io.realm.Realm
 import io.realm.RealmConfiguration
@@ -17,9 +14,6 @@ class DaysUntilApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-
-        //Setup ImageLoader
-        ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(this))
 
         //Set path to store event images
         val appPath = this.filesDir.absolutePath

@@ -42,23 +42,23 @@ class RealmManager {
     fun newEvent(title: String?, uuid: String?, timestamp: Long): Observable<RealmAsyncTask> {
 
         return Observable.just (
-            realm.executeTransaction({ realm ->
+            realm.executeTransactionAsync{ realm ->
                 val event = RealmEvent()
                 event.title = title
                 event.uuid = uuid
                 event.timestamp = timestamp
                 realm.copyToRealmOrUpdate(event)
-            }, null)
+            }
         )
     }
 
     fun removeEvent(uuid: String?): Observable<RealmAsyncTask> {
 
         return Observable.just(
-            realm.executeTransaction({ realm ->
+            realm.executeTransactionAsync{ realm ->
                 val realmEvent = realm.where(RealmEvent::class.java).equalTo("uuid", uuid).findFirst()
-                realmEvent.removeFromRealm()
-            }, null)
+                realmEvent.deleteFromRealm()
+            }
         )
     }
 

@@ -8,7 +8,7 @@ import com.gpacini.daysuntil.R
 import com.gpacini.daysuntil.data.ImageHelper
 import com.gpacini.daysuntil.data.model.Event
 import com.gpacini.daysuntil.ui.activity.EventActivity
-import com.nostra13.universalimageloader.core.ImageLoader
+import com.squareup.picasso.Picasso
 import uk.co.ribot.easyadapter.ItemViewHolder
 import uk.co.ribot.easyadapter.PositionInfo
 import uk.co.ribot.easyadapter.annotations.LayoutId
@@ -29,9 +29,8 @@ class EventHolder(view: View) : ItemViewHolder<Event>(view) {
 
     override fun onSetValues(event: Event, positionInfo: PositionInfo?) {
         //Display image for event in card
-        val imageLoader = ImageLoader.getInstance()
         val imageHelper = ImageHelper.getInstance()
-        imageLoader.displayImage(imageHelper.withCrop(event.uuid), mImageEvent!!)
+        Picasso.with(view.context).load(imageHelper.withCrop(event.uuid)).into(mImageEvent)
 
         mTextTitle?.text = event.title
 

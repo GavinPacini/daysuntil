@@ -15,7 +15,7 @@ What do I mean by "more"? Here's exactly what I've made extensive use of:
  - [EasyAdapter](https://github.com/ribot/easy-adapter)
  - [Kotter Knife](https://github.com/JakeWharton/kotterknife)
  - [Material DateTime Picker](https://github.com/wdullaer/MaterialDateTimePicker)
- - [Universal Image Loader](https://github.com/nostra13/Android-Universal-Image-Loader)
+ - [Picasso](http://square.github.io/picasso/)
  - [Android-Crop](https://github.com/jdamcd/android-crop)
  
 P.S: They are all amazing.
@@ -27,9 +27,9 @@ I had been looking for something like this myself and couldn't find one. So, if 
 Requirements
 ------------
  - [Android SDK](http://developer.android.com/sdk/index.html)
- - Android SDK Build tools 23.0.2
+ - Android SDK Build tools 23.0.3
  - Android Support Repository and Library
- - Gradle Plugin 1.5.0
+ - Gradle Plugin 2.1.0
  
 Building
 --------

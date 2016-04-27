@@ -18,15 +18,6 @@
 
 -useuniqueclassmembernames
 
-# For Realm:
--keep class io.realm.annotations.RealmModule
--keep @io.realm.annotations.RealmModule class *
--keep class io.realm.internal.Keep
--keep @io.realm.internal.Keep class *
--dontwarn javax.**
--dontwarn io.realm.**
-
-
 # For Kotlin:
 -dontwarn kotlin.**
 
@@ -35,6 +26,9 @@
 -keepclassmembers class * extends uk.co.ribot.easyadapter.ItemViewHolder {
     public <init>(...);
  }
+
+# For Picasso:
+-dontwarn com.squareup.okhttp.**
 
 # For Support:
 -dontwarn android.support.design.**

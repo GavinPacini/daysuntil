@@ -20,12 +20,12 @@ import android.widget.ImageView
 import android.widget.Toast
 import butterknife.bindView
 import com.gpacini.daysuntil.R
+import com.gpacini.daysuntil.data.CustomTarget
 import com.gpacini.daysuntil.data.ImageHelper
 import com.gpacini.daysuntil.data.RealmManager
 import com.gpacini.daysuntil.data.model.Event
-import com.nostra13.universalimageloader.core.ImageLoader
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener
 import com.soundcloud.android.crop.Crop
+import com.squareup.picasso.Picasso
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import rx.subscriptions.CompositeSubscription
 import java.io.File
@@ -71,7 +71,12 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
     private val mCalendar: Calendar = Calendar.getInstance()
     private val mSubscriptions: CompositeSubscription = CompositeSubscription()
 
-
+    private val target = CustomTarget { bitmap ->
+        mInputImage.setImageBitmap(bitmap)
+        mInputImage.scaleType = ImageView.ScaleType.CENTER_CROP
+        imageBitmapCrop = bitmap
+        checkAllFields()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -222,14 +227,7 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
     }
 
     private fun loadImage(imageURI: String) {
-        val imageLoader = ImageLoader.getInstance()
-        imageLoader.displayImage(imageURI, mInputImage, object : SimpleImageLoadingListener() {
-            override fun onLoadingComplete(imageUri: String?, view: View?, loadedImage: Bitmap?) {
-                mInputImage.scaleType = ImageView.ScaleType.CENTER_CROP
-                imageBitmapCrop = loadedImage
-                checkAllFields()
-            }
-        })
+        Picasso.with(this).load(imageURI).into(target)
 
         mRecropImage.visibility = View.VISIBLE
         mRecropImage.isClickable = true
