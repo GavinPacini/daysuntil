@@ -19,20 +19,20 @@ import java.util.*
 class EventHolder(view: View) : ItemViewHolder<Event>(view) {
 
     @ViewId(R.id.image_event)
-    private val mImageEvent: ImageView? = null
+    private val imageEvent: ImageView? = null
     @ViewId(R.id.text_title)
-    private val mTextTitle: TextView? = null
+    private val textTitle: TextView? = null
     @ViewId(R.id.text_time)
-    private val mTextTime: TextView? = null
+    private val textTime: TextView? = null
 
     private val MILLIS_IN_DAY = 1000 * 60 * 60 * 24
 
     override fun onSetValues(event: Event, positionInfo: PositionInfo?) {
         //Display image for event in card
         val imageHelper = ImageHelper.getInstance()
-        Picasso.with(view.context).load(imageHelper.withCrop(event.uuid)).into(mImageEvent)
+        Picasso.with(context).load(imageHelper.withCrop(event.uuid)).into(imageEvent)
 
-        mTextTitle?.text = event.title
+        textTitle?.text = event.title
 
         setDays(event)
     }
@@ -51,11 +51,11 @@ class EventHolder(view: View) : ItemViewHolder<Event>(view) {
         if (days < 0) days *= -1
         val dayOrDays = if (days.toInt() == 1) "day" else "days"
 
-        mTextTime?.text = "${days} ${dayOrDays} ${sinceOrUntil}..."
+        textTime?.text = "${days} ${dayOrDays} ${sinceOrUntil}..."
     }
 
     override fun onSetListeners() {
-        mImageEvent?.setOnClickListener {
+        imageEvent?.setOnClickListener {
             (context as? AppCompatActivity)?.startActivity(
                     EventActivity.getEditIntent(context, item))
         }

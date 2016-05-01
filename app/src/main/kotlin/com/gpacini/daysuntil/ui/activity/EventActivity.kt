@@ -9,11 +9,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -33,7 +31,7 @@ import java.io.File
 import java.text.DateFormat
 import java.util.*
 
-class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, TextWatcher {
+class EventActivity : BaseActivity(), DatePickerDialog.OnDateSetListener, TextWatcher {
 
     companion object Factory {
 
@@ -51,31 +49,30 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
         }
     }
 
-    private val mToolbar: Toolbar by bindView(R.id.toolbar)
-    private val mInputTitle: EditText by bindView(R.id.input_title)
-    private val mInputDate: EditText by bindView(R.id.input_date)
-    private val mInputImage: ImageView by bindView(R.id.input_image)
-    private val mRecropImage: ImageView by bindView(R.id.recrop_image)
-    private val mButtonDiscard: Button by bindView(R.id.btn_discard)
-    private val mButtonSave: Button by bindView(R.id.btn_save)
+    private val toolbar: Toolbar by bindView(R.id.toolbar)
+    private val inputTitle: EditText by bindView(R.id.input_title)
+    private val inputDate: EditText by bindView(R.id.input_date)
+    private val inputImage: ImageView by bindView(R.id.input_image)
+    private val recropImage: ImageView by bindView(R.id.recrop_image)
+    private val buttonDiscard: Button by bindView(R.id.btn_discard)
+    private val buttonSave: Button by bindView(R.id.btn_save)
 
     private var imageBitmapCrop: Bitmap? = null
     private var fullImageLocation: Uri? = null
-    private var mDatePickerDialog: DatePickerDialog? = null
+    private var datePickerDialog: DatePickerDialog? = null
     private var uuid: String? = null
-    private var mEvent: Event? = null
+    private var event: Event? = null
 
     private var isEditingEvent = false
     private var hasMadeChanges = false
 
     private val realmManager: RealmManager = RealmManager()
-    private val mCalendar: Calendar = Calendar.getInstance()
-    private val mSubscriptions: CompositeSubscription = CompositeSubscription()
+    private val calendar: Calendar = Calendar.getInstance()
+    private val subscriptions: CompositeSubscription = CompositeSubscription()
 
     private val target = CustomTarget { bitmap ->
-        Log.d("bitmap tag", "${bitmap?.hashCode()}")
-        mInputImage.setImageBitmap(bitmap)
-        mInputImage.scaleType = ImageView.ScaleType.CENTER_CROP
+        inputImage.setImageBitmap(bitmap)
+        inputImage.scaleType = ImageView.ScaleType.CENTER_CROP
         imageBitmapCrop = bitmap
         checkAllFields()
     }
@@ -84,8 +81,8 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event)
 
-        mEvent = intent.getParcelableExtra(EXTRA_EVENT)
-        isEditingEvent = mEvent != null
+        event = intent.getParcelableExtra(EXTRA_EVENT)
+        isEditingEvent = event != null
 
         setupScreen()
         setupDateTimePickers()
@@ -94,27 +91,27 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
 
     override fun onDestroy() {
         super.onDestroy()
-        mSubscriptions.unsubscribe()
+        subscriptions.unsubscribe()
         realmManager.close()
     }
 
     fun setupScreen() {
-        setSupportActionBar(mToolbar)
+        setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         if (isEditingEvent) {
             supportActionBar?.title = resources.getString(R.string.edit_event)
 
-            mInputTitle.setText(mEvent?.title)
+            inputTitle.setText(event?.title)
 
-            mCalendar.timeInMillis = mEvent!!.timestamp
-            setDate(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DATE))
+            calendar.timeInMillis = event!!.timestamp
+            setDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE))
 
             val imageHelper = ImageHelper.getInstance()
-            fullImageLocation = Uri.parse(imageHelper.with(mEvent?.uuid))
-            loadImage(imageHelper.withCrop(mEvent?.uuid))
+            fullImageLocation = Uri.parse(imageHelper.with(event?.uuid))
+            loadImage(imageHelper.withCrop(event?.uuid))
 
-            uuid = mEvent?.uuid
+            uuid = event?.uuid
         } else {
             supportActionBar?.title = resources.getString(R.string.add_event)
             uuid = UUID.randomUUID().toString()
@@ -122,25 +119,25 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
     }
 
     fun setupDateTimePickers() {
-        mDatePickerDialog = DatePickerDialog.newInstance(this, mCalendar.get(Calendar.YEAR),
-                mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH))
-        mDatePickerDialog?.dismissOnPause(true)
+        datePickerDialog = DatePickerDialog.newInstance(this, calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
+        datePickerDialog?.dismissOnPause(true)
     }
 
     fun setupListeners() {
-        mInputTitle.addTextChangedListener(this)
-        mInputDate.addTextChangedListener(this)
+        inputTitle.addTextChangedListener(this)
+        inputDate.addTextChangedListener(this)
 
         fun controlDialog(dialog: DialogFragment?, hasFocus: Boolean, tag: String) {
             if (hasFocus) dialog?.show(fragmentManager, tag) else dialog?.dismiss()
         }
 
-        mInputDate.setOnClickListener { controlDialog(mDatePickerDialog, true, "dpd") }
-        mInputDate.setOnFocusChangeListener { view, b -> controlDialog(mDatePickerDialog, b, "dpd") }
+        inputDate.setOnClickListener { controlDialog(datePickerDialog, true, "dpd") }
+        inputDate.setOnFocusChangeListener { view, b -> controlDialog(datePickerDialog, b, "dpd") }
 
-        mInputImage.setOnClickListener { Crop.pickImage(this) }
+        inputImage.setOnClickListener { Crop.pickImage(this) }
 
-        mButtonDiscard.setOnClickListener {
+        buttonDiscard.setOnClickListener {
             if (hasMadeChanges) {
                 AlertDialog.Builder(this)
                         .setTitle(R.string.are_you_sure_dialog)
@@ -152,15 +149,15 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
             }
         }
 
-        mButtonSave.setOnClickListener {
+        buttonSave.setOnClickListener {
 
-            if (mButtonSave.isEnabled) {
+            if (buttonSave.isEnabled) {
 
                 val imageHelper = ImageHelper.getInstance()
                 val imageBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, fullImageLocation)
                 imageHelper.saveImage(imageBitmap, imageBitmapCrop, uuid)
 
-                mSubscriptions.add(realmManager.newEvent(uuid, mInputTitle.text.toString().trim(), mCalendar.timeInMillis)
+                subscriptions.add(realmManager.newEvent(uuid, inputTitle.text.toString().trim(), calendar.timeInMillis)
                         .subscribe({
                             val toastMessageResource =
                                     if (isEditingEvent) R.string.event_successfully_edited
@@ -184,10 +181,10 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
     }
 
     private fun setDate(year: Int, monthOfYear: Int, dayOfMonth: Int) {
-        mCalendar.set(year, monthOfYear, dayOfMonth)
+        calendar.set(year, monthOfYear, dayOfMonth)
 
         val dateFormat = DateFormat.getDateInstance()
-        mInputDate.setText(dateFormat.format(mCalendar.time))
+        inputDate.setText(dateFormat.format(calendar.time))
     }
 
 
@@ -203,11 +200,11 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
     }
 
     private fun checkAllFields() {
-        if (mInputTitle.text.toString().isNotBlank() && mInputDate.text.toString().isNotBlank()
+        if (inputTitle.text.toString().isNotBlank() && inputDate.text.toString().isNotBlank()
                 && imageBitmapCrop != null) {
-            mButtonSave.isEnabled = true
+            buttonSave.isEnabled = true
         } else {
-            mButtonSave.isEnabled = false
+            buttonSave.isEnabled = false
         }
     }
 
@@ -217,7 +214,7 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
                 fullImageLocation = data?.data
 
                 val destination = Uri.fromFile(File(cacheDir, "cropped"))
-                Crop.of(data?.data, destination).withAspect(mInputImage.width, mInputImage.height)
+                Crop.of(data?.data, destination).withAspect(inputImage.width, inputImage.height)
                         .start(this)
             } else if (requestCode == Crop.REQUEST_CROP) {
                 hasMadeChanges = true
@@ -228,7 +225,7 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
     }
 
     override fun onBackPressed(){
-        mButtonDiscard.callOnClick()
+        buttonDiscard.callOnClick()
     }
 
     private fun loadImage(imageURI: String) {
@@ -236,13 +233,13 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
         Picasso.with(this).invalidate(Uri.fromFile(File(cacheDir, "cropped")))
         Picasso.with(this).load(imageURI).into(target)
 
-        mRecropImage.visibility = View.VISIBLE
-        mRecropImage.isClickable = true
+        recropImage.visibility = View.VISIBLE
+        recropImage.isClickable = true
 
-        mRecropImage.setOnClickListener {
+        recropImage.setOnClickListener {
             val destination = Uri.fromFile(File(cacheDir, "cropped"))
             Crop.of(fullImageLocation, destination)
-                    .withAspect(mInputImage.width, mInputImage.height)
+                    .withAspect(inputImage.width, inputImage.height)
                     .start(this)
         }
     }
