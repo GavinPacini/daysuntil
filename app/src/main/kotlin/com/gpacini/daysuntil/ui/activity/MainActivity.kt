@@ -19,7 +19,6 @@ import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import butterknife.bindView
-import com.gpacini.daysuntil.BuildConfig
 import com.gpacini.daysuntil.R
 import com.gpacini.daysuntil.data.ImageHelper
 import com.gpacini.daysuntil.data.RealmManager
@@ -52,11 +51,6 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(mToolbar)
         setupRecyclerView()
         checkEvents()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        mEasyRecycleAdapter?.notifyDataSetChanged()
     }
 
     override fun onDestroy() {
@@ -133,22 +127,22 @@ class MainActivity : AppCompatActivity() {
         mSubscriptions.add(realmManager.removeEvent(event.uuid!!)
                 .subscribe({
                     if (mEasyRecycleAdapter?.removeItem(event) ?: false) {
-                        showUndo(event)
+                        showUndo(event.uuid, event.title, event.timestamp)
                     }
                 })
         )
     }
 
-    private fun showUndo(event: Event) {
+    private fun showUndo(uuid: String?, title: String?, timestamp: Long) {
         val snackBar = Snackbar
                 .make(mContainer, R.string.event_successfully_removed, Snackbar.LENGTH_LONG)
                 .setAction(R.string.undo, {
-                    realmManager.newEvent(event.title, event.uuid, event.timestamp)
+                    realmManager.newEvent(uuid, title, timestamp)
                 })
                 .setCallback(object : Snackbar.Callback() {
                     override fun onDismissed(snackbar: Snackbar?, e: Int) {
-                        if (e != Snackbar.Callback.DISMISS_EVENT_ACTION) {
-                            ImageHelper.getInstance().deleteImage(event.uuid)
+                        if (e != DISMISS_EVENT_ACTION) {
+                            ImageHelper.getInstance().deleteImage(uuid)
                         }
                     }
                 })

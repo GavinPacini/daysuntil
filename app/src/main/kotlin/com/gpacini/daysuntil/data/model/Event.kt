@@ -2,15 +2,20 @@ package com.gpacini.daysuntil.data.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import io.realm.RealmModel
+import io.realm.annotations.PrimaryKey
+import io.realm.annotations.RealmClass
 
 /**
  * Created by gavinpacini on 10/10/15.
  */
-class Event : Parcelable {
+@RealmClass
+open class Event() : Parcelable, RealmModel {
 
-    var uuid: String? = null
-    var title: String? = null
-    var timestamp: Long = 0
+    @PrimaryKey
+    open var uuid: String? = null
+    open var title: String? = null
+    open var timestamp: Long = 0
 
     override fun describeContents(): Int = 0
 
@@ -20,17 +25,14 @@ class Event : Parcelable {
         dest.writeLong(this.timestamp)
     }
 
-    constructor(realmEvent: RealmEvent) {
-        this.uuid = realmEvent.uuid
-        this.title = realmEvent.title
-        this.timestamp = realmEvent.timestamp
+    constructor(uuid: String?, title: String?, timestamp: Long = 0) : this() {
+        this.uuid = uuid
+        this.title = title
+        this.timestamp = timestamp
     }
 
-    protected constructor(input: Parcel) {
-        this.uuid = input.readString()
-        this.title = input.readString()
-        this.timestamp = input.readLong()
-    }
+    protected constructor(input: Parcel) :
+    this(input.readString(), input.readString(), input.readLong())
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

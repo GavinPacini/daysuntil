@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -25,7 +26,6 @@ import com.gpacini.daysuntil.data.ImageHelper
 import com.gpacini.daysuntil.data.RealmManager
 import com.gpacini.daysuntil.data.model.Event
 import com.soundcloud.android.crop.Crop
-import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import rx.subscriptions.CompositeSubscription
@@ -73,6 +73,7 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
     private val mSubscriptions: CompositeSubscription = CompositeSubscription()
 
     private val target = CustomTarget { bitmap ->
+        Log.d("bitmap tag", "${bitmap?.hashCode()}")
         mInputImage.setImageBitmap(bitmap)
         mInputImage.scaleType = ImageView.ScaleType.CENTER_CROP
         imageBitmapCrop = bitmap
@@ -159,11 +160,14 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
                 val imageBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, fullImageLocation)
                 imageHelper.saveImage(imageBitmap, imageBitmapCrop, uuid)
 
-                mSubscriptions.add(realmManager.newEvent(mInputTitle.text.toString().trim(), uuid, mCalendar.timeInMillis)
+                mSubscriptions.add(realmManager.newEvent(uuid, mInputTitle.text.toString().trim(), mCalendar.timeInMillis)
                         .subscribe({
                             val toastMessageResource =
                                     if (isEditingEvent) R.string.event_successfully_edited
                                     else R.string.event_successfully_added
+
+                            //If crop has changed, force reload instead of using cache
+                            Picasso.with(this).invalidate(imageHelper.withCrop(uuid))
 
                             Toast.makeText(this@EventActivity, toastMessageResource, Toast.LENGTH_LONG).show()
                             finish()
@@ -228,7 +232,9 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
     }
 
     private fun loadImage(imageURI: String) {
-        Picasso.with(this).load(imageURI).memoryPolicy(MemoryPolicy.NO_CACHE).into(target)
+        //Remove from cache as same file name is used for temporary cropped image
+        Picasso.with(this).invalidate(Uri.fromFile(File(cacheDir, "cropped")))
+        Picasso.with(this).load(imageURI).into(target)
 
         mRecropImage.visibility = View.VISIBLE
         mRecropImage.isClickable = true

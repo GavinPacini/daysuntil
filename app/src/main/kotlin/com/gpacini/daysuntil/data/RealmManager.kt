@@ -1,9 +1,9 @@
 package com.gpacini.daysuntil.data
 
 import com.gpacini.daysuntil.data.model.Event
-import com.gpacini.daysuntil.data.model.RealmEvent
 import io.realm.Realm
 import io.realm.RealmAsyncTask
+import io.realm.RealmObject
 import io.realm.Sort
 import rx.Observable
 
@@ -16,37 +16,26 @@ class RealmManager {
 
     fun hasEvents(): Observable<Boolean> {
 
-        return realm.where(RealmEvent::class.java)
+        return realm.where(Event::class.java)
                 .findAllAsync()
                 .asObservable()
-                .map { realmEvents ->
-                    !realmEvents.isEmpty()
-                }
+                .map { !it.isEmpty() }
                 .distinctUntilChanged()
     }
 
     fun loadEvents(): Observable<List<Event>> {
 
-        return realm.where(RealmEvent::class.java)
+        return realm.where(Event::class.java)
                 .findAllSortedAsync("timestamp", Sort.DESCENDING)
                 .asObservable()
-                .map { realmEvents ->
-                    val events = mutableListOf<Event>()
-                    realmEvents.forEach {
-                        events.add(Event(it))
-                    }
-                    events
-                }
+                .map { it.toList() }
     }
 
-    fun newEvent(title: String?, uuid: String?, timestamp: Long): Observable<RealmAsyncTask> {
+    fun newEvent(uuid: String?, title: String?, timestamp: Long): Observable<RealmAsyncTask> {
 
         return Observable.just (
             realm.executeTransactionAsync{ realm ->
-                val event = RealmEvent()
-                event.title = title
-                event.uuid = uuid
-                event.timestamp = timestamp
+                val event = Event(uuid, title, timestamp)
                 realm.copyToRealmOrUpdate(event)
             }
         )
@@ -56,8 +45,8 @@ class RealmManager {
 
         return Observable.just(
             realm.executeTransactionAsync{ realm ->
-                val realmEvent = realm.where(RealmEvent::class.java).equalTo("uuid", uuid).findFirst()
-                realmEvent.deleteFromRealm()
+                val realmEvent = realm.where(Event::class.java).equalTo("uuid", uuid).findFirst()
+                RealmObject.deleteFromRealm(realmEvent)
             }
         )
     }
