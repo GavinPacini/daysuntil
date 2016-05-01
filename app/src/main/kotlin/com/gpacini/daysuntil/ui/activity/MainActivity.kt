@@ -49,6 +49,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         setSupportActionBar(mToolbar)
+        window.setBackgroundDrawableResource(R.color.background_material_light)
         setupRecyclerView()
         checkEvents()
     }
