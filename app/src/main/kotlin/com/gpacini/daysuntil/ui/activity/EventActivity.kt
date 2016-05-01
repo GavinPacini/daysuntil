@@ -7,7 +7,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
@@ -24,9 +23,12 @@ import com.gpacini.daysuntil.data.CustomTarget
 import com.gpacini.daysuntil.data.ImageHelper
 import com.gpacini.daysuntil.data.RealmManager
 import com.gpacini.daysuntil.data.model.Event
+import com.gpacini.daysuntil.ui.views.ProgressButton
 import com.soundcloud.android.crop.Crop
 import com.squareup.picasso.Picasso
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
 import java.io.File
 import java.text.DateFormat
@@ -56,7 +58,7 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
     private val inputImage: ImageView by bindView(R.id.input_image)
     private val recropImage: ImageView by bindView(R.id.recrop_image)
     private val buttonDiscard: Button by bindView(R.id.btn_discard)
-    private val buttonSave: Button by bindView(R.id.btn_save)
+    private val buttonSave: ProgressButton by bindView(R.id.btn_save)
 
     private var imageBitmapCrop: Bitmap? = null
     private var fullImageLocation: Uri? = null
@@ -151,27 +153,15 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
         }
 
         buttonSave.setOnClickListener {
+            val imageHelper = ImageHelper.getInstance()
 
-            if (buttonSave.isEnabled) {
-
-                val imageHelper = ImageHelper.getInstance()
-                val imageBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, fullImageLocation)
-                imageHelper.saveImage(imageBitmap, imageBitmapCrop, uuid)
-
-                subscriptions.add(realmManager.newEvent(uuid, inputTitle.text.toString().trim(), calendar.timeInMillis)
-                        .subscribe({
-                            val toastMessageResource =
-                                    if (isEditingEvent) R.string.event_successfully_edited
-                                    else R.string.event_successfully_added
-
-                            //If crop has changed, force reload instead of using cache
-                            Picasso.with(this).invalidate(imageHelper.withCrop(uuid))
-
-                            Toast.makeText(this@EventActivity, toastMessageResource, Toast.LENGTH_LONG).show()
-                            finish()
-                        })
-                )
-            }
+            subscriptions.add(imageHelper.getBitmap(this.contentResolver, fullImageLocation)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ imageBitmap ->
+                        addEventAndClose(imageBitmap)
+                    })
+            )
         }
 
         checkAllFields()
@@ -243,5 +233,28 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
                     .withAspect(inputImage.width, inputImage.height)
                     .start(this)
         }
+    }
+
+
+    private fun addEventAndClose(imageBitmap: Bitmap) {
+        val imageHelper = ImageHelper.getInstance()
+        subscriptions.add(realmManager.newEvent(uuid, inputTitle.text.toString().trim(), calendar.timeInMillis)
+                .zipWith(imageHelper.saveImage(imageBitmap, imageBitmapCrop, uuid), {
+                    realmResult, imageResult -> imageResult
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    val toastMessageResource =
+                            if (isEditingEvent) R.string.event_successfully_edited
+                            else R.string.event_successfully_added
+
+                    //If crop has changed, force reload instead of using cache
+                    Picasso.with(this).invalidate(imageHelper.withCrop(uuid))
+
+                    Toast.makeText(this@EventActivity, toastMessageResource, Toast.LENGTH_LONG).show()
+                    finish()
+                })
+        )
     }
 }

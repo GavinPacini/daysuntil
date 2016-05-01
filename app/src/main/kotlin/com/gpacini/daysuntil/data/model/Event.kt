@@ -8,6 +8,8 @@ import io.realm.annotations.RealmClass
 
 /**
  * Created by gavinpacini on 10/10/15.
+ *
+ * A class used to create and manipulate events. Also defines the schema for Realm usage.
  */
 @RealmClass
 open class Event() : Parcelable, RealmModel {
