@@ -4,7 +4,6 @@ apply plugin: "io.fabric"
 apply plugin: "realm-android"
 
 android {
-
     signingConfigs {
         release
     }
@@ -90,13 +89,18 @@ repositories {
     maven { url "https://maven.fabric.io/public" }
 }
 
-def props = new Properties()
+try {
+    def props = new Properties()
 
-props.load(new FileInputStream(rootProject.file("release.properties")))
+    props.load(new FileInputStream(rootProject.file("release.properties")))
 
-android.signingConfigs.release.storeFile file(props.keyStore)
-android.signingConfigs.release.storePassword props.keyStorePassword
-android.signingConfigs.release.keyAlias props.keyAlias
-android.signingConfigs.release.keyPassword props.keyAliasPassword
+    android.signingConfigs.release.storeFile file(props.keyStore)
+    android.signingConfigs.release.storePassword props.keyStorePassword
+    android.signingConfigs.release.keyAlias props.keyAlias
+    android.signingConfigs.release.keyPassword props.keyAliasPassword
 
-android.defaultConfig.manifestPlaceholders = [fabricApiKey:"$props.fabricApiKey"]
+    android.defaultConfig.manifestPlaceholders = [fabricApiKey: "$props.fabricAPIKey"]
+} catch (Exception e) {
+    //Dummy API Key
+    android.defaultConfig.manifestPlaceholders = [fabricApiKey: "781629148259378d44601ad4b85c966bb38841eb"]
+}
