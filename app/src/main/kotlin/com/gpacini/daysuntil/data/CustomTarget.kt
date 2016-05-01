@@ -7,7 +7,7 @@ import com.squareup.picasso.Picasso
 /**
  * Created by gavinpacini on 27/04/2016.
  */
-class CustomTarget(var callback: (Bitmap?) -> Unit) : com.squareup.picasso.Target{
+class CustomTarget(var callback: (Bitmap?) -> Unit) : com.squareup.picasso.Target {
 
     override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
     }

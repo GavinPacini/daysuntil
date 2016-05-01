@@ -225,7 +225,7 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
         }
     }
 
-    override fun onBackPressed(){
+    override fun onBackPressed() {
         buttonDiscard.callOnClick()
     }
 

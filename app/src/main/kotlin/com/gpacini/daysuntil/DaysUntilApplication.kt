@@ -24,7 +24,7 @@ class DaysUntilApplication : Application() {
         Realm.setDefaultConfiguration(config)
 
         //Setup Crashlytics
-        if(!BuildConfig.DEBUG) {
+        if (!BuildConfig.DEBUG) {
             Fabric.with(this, Crashlytics())
         }
     }
