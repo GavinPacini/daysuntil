@@ -25,6 +25,7 @@ import com.gpacini.daysuntil.data.ImageHelper
 import com.gpacini.daysuntil.data.RealmManager
 import com.gpacini.daysuntil.data.model.Event
 import com.soundcloud.android.crop.Crop
+import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import rx.subscriptions.CompositeSubscription
@@ -227,7 +228,7 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
     }
 
     private fun loadImage(imageURI: String) {
-        Picasso.with(this).load(imageURI).into(target)
+        Picasso.with(this).load(imageURI).memoryPolicy(MemoryPolicy.NO_CACHE).into(target)
 
         mRecropImage.visibility = View.VISIBLE
         mRecropImage.isClickable = true
