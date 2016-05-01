@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.text.Editable
 import android.text.TextWatcher
@@ -31,7 +32,7 @@ import java.io.File
 import java.text.DateFormat
 import java.util.*
 
-class EventActivity : BaseActivity(), DatePickerDialog.OnDateSetListener, TextWatcher {
+class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, TextWatcher {
 
     companion object Factory {
 

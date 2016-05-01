@@ -6,6 +6,7 @@ import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
@@ -27,7 +28,7 @@ import rx.Subscription
 import rx.subscriptions.CompositeSubscription
 import uk.co.ribot.easyadapter.EasyRecyclerAdapter
 
-class MainActivity : BaseActivity() {
+class MainActivity : AppCompatActivity() {
 
     private val container: CoordinatorLayout by bindView(R.id.container_main)
     private val toolbar: Toolbar by bindView(R.id.toolbar)
@@ -46,8 +47,9 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         setSupportActionBar(toolbar)
+        window.setBackgroundDrawableResource(R.color.background_material_light)
+
         setupRecyclerView()
         checkEvents()
     }
