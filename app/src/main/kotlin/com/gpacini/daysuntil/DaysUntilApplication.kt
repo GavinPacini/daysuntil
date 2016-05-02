@@ -2,13 +2,15 @@ package com.gpacini.daysuntil
 
 import android.app.Application
 import com.crashlytics.android.Crashlytics
-import com.gpacini.daysuntil.data.ImageHelper
+import com.gpacini.daysuntil.data.images.ImageHelper
 import io.fabric.sdk.android.Fabric
 import io.realm.Realm
 import io.realm.RealmConfiguration
 
 /**
  * Created by gavinpacini on 10/10/15.
+ *
+ * Entry point before launching primary activity
  */
 class DaysUntilApplication : Application() {
 

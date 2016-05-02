@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.gpacini.daysuntil.R
-import com.gpacini.daysuntil.data.ImageHelper
+import com.gpacini.daysuntil.data.images.ImageHelper
 import com.gpacini.daysuntil.data.model.Event
 import com.gpacini.daysuntil.ui.activity.EventActivity
 import com.squareup.picasso.Picasso

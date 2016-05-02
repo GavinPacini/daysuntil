@@ -1,4 +1,4 @@
-package com.gpacini.daysuntil.data
+package com.gpacini.daysuntil.data.database
 
 import com.gpacini.daysuntil.data.model.Event
 import io.realm.Realm

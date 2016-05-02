@@ -19,9 +19,9 @@ import android.widget.ImageView
 import android.widget.Toast
 import butterknife.bindView
 import com.gpacini.daysuntil.R
-import com.gpacini.daysuntil.data.CustomTarget
-import com.gpacini.daysuntil.data.ImageHelper
-import com.gpacini.daysuntil.data.RealmManager
+import com.gpacini.daysuntil.data.database.RealmManager
+import com.gpacini.daysuntil.data.images.CustomTarget
+import com.gpacini.daysuntil.data.images.ImageHelper
 import com.gpacini.daysuntil.data.model.Event
 import com.gpacini.daysuntil.ui.views.ProgressButton
 import com.soundcloud.android.crop.Crop
@@ -238,6 +238,7 @@ class EventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener, T
 
     private fun addEventAndClose(imageBitmap: Bitmap) {
         val imageHelper = ImageHelper.getInstance()
+
         subscriptions.add(realmManager.newEvent(uuid, inputTitle.text.toString().trim(), calendar.timeInMillis)
                 .zipWith(imageHelper.saveImage(imageBitmap, imageBitmapCrop, uuid), {
                     realmResult, imageResult -> imageResult

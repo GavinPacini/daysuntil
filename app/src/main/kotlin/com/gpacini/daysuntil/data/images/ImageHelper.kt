@@ -1,4 +1,4 @@
-package com.gpacini.daysuntil.data
+package com.gpacini.daysuntil.data.images
 
 import android.content.ContentResolver
 import android.graphics.Bitmap
@@ -6,6 +6,7 @@ import android.net.Uri
 import android.provider.MediaStore
 import rx.Observable
 import java.io.File
+import java.io.FileNotFoundException
 import java.io.FileOutputStream
 
 /**
@@ -40,7 +41,7 @@ class ImageHelper {
         return "file://${filePath}/${uuid}_crop.jpg"
     }
 
-    fun getBitmap(contentResolver: ContentResolver, fullImageLocation: Uri?) : Observable<Bitmap>{
+    fun getBitmap(contentResolver: ContentResolver, fullImageLocation: Uri?) : Observable<Bitmap> {
         return Observable.fromCallable {
             MediaStore.Images.Media.getBitmap(contentResolver, fullImageLocation)
         }
@@ -74,16 +75,16 @@ class ImageHelper {
         }
     }
 
-    fun deleteImage(uuid: String?) {
-        val imageFile = File(filePath + "/${uuid}.jpg")
-        val imageFileCrop = File(filePath + "/${uuid}_crop.jpg")
+    fun deleteImage(uuid: String?) : Observable<Boolean> {
+        return Observable.fromCallable {
+            val imageFile = File(filePath + "/${uuid}.jpg")
+            val imageFileCrop = File(filePath + "/${uuid}_crop.jpg")
 
-        if (imageFile.exists()) {
-            imageFile.delete()
-        }
+            if (!imageFile.exists() || !imageFileCrop.exists()){
+                throw FileNotFoundException()
+            }
 
-        if (imageFileCrop.exists()) {
-            imageFileCrop.delete()
+            imageFile.delete() && imageFileCrop.delete()
         }
     }
 }

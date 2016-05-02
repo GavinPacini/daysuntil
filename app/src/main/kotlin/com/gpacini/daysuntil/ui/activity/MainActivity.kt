@@ -20,8 +20,8 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import butterknife.bindView
 import com.gpacini.daysuntil.R
-import com.gpacini.daysuntil.data.ImageHelper
-import com.gpacini.daysuntil.data.RealmManager
+import com.gpacini.daysuntil.data.database.RealmManager
+import com.gpacini.daysuntil.data.images.ImageHelper
 import com.gpacini.daysuntil.data.model.Event
 import com.gpacini.daysuntil.ui.adapter.EventHolder
 import rx.Subscription
@@ -143,7 +143,8 @@ class MainActivity : AppCompatActivity() {
                 .setCallback(object : Snackbar.Callback() {
                     override fun onDismissed(snackbar: Snackbar?, e: Int) {
                         if (e != DISMISS_EVENT_ACTION) {
-                            ImageHelper.getInstance().deleteImage(uuid)
+                            subscriptions.add(ImageHelper.getInstance().deleteImage(uuid)
+                                    .subscribe({}))
                         }
                     }
                 })
