@@ -17,8 +17,6 @@ What do I mean by "more"? Here's exactly what I've made extensive use of:
  - [Material DateTime Picker](https://github.com/wdullaer/MaterialDateTimePicker)
  - [Picasso](http://square.github.io/picasso/)
  - [Android-Crop](https://github.com/jdamcd/android-crop)
- 
-P.S: They are all amazing.
 
 I used this great project, [Android Boilerplate](https://github.com/hitherejoe/Android-Boilerplate), as a reference.
 
@@ -53,7 +51,7 @@ If you see something you think could be better, please don't hesitate to submit 
 License
 --------------
 
-    Copyright 2015 Gavin Pacini
+    Copyright 2016 Gavin Pacini
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
